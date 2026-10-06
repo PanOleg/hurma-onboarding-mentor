@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Knowledge\Chunking\Chunker;
 use App\Knowledge\Contracts\EmbeddingProvider;
 use App\Knowledge\Contracts\TextExtractor;
 use App\Knowledge\Embedding\HttpEmbeddingProvider;
@@ -24,6 +25,10 @@ class RagServiceProvider extends ServiceProvider
         ));
         $this->app->bind(TextExtractor::class, fn ($app) => new CompositeTextExtractor(
             new LocalTextExtractor, $app->make(HttpTextExtractor::class),
+        ));
+
+        $this->app->bind(Chunker::class, fn () => new Chunker(
+            config('rag.chunk.target_tokens'), config('rag.chunk.overlap_tokens'), config('rag.chunk.max_tokens'),
         ));
     }
 }

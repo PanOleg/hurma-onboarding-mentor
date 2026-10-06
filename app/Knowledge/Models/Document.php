@@ -15,6 +15,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @property DocumentStatus $status
+ */
 class Document extends Model
 {
     /** @use HasFactory<DocumentFactory> */
