@@ -30,6 +30,7 @@ final class Chunker
         $heading = null;
         $bufferHeading = null;
         $prevTail = '';
+        $pendingHeading = false;
 
         $flush = function () use (&$chunks, &$buffer, &$bufferPage, &$bufferHeading, &$prevTail) {
             $content = trim($buffer);
@@ -46,6 +47,7 @@ final class Chunker
                 $flush();
                 $heading = $text;
                 $prevTail = '';
+                $pendingHeading = true;
 
                 continue;
             }
@@ -61,6 +63,11 @@ final class Chunker
                 if ($buffer === '') {
                     $bufferPage = $page;
                     $bufferHeading = $heading;
+                    if ($pendingHeading && $heading !== null) {
+                        // keep the heading text in the content so it is embedded too
+                        $candidate = $heading."\n\n".$candidate;
+                    }
+                    $pendingHeading = false;
                 }
                 $buffer = $candidate;
             }
@@ -114,7 +121,7 @@ final class Chunker
         if (preg_match('/^#{1,6}\s+\S/u', $line)) {
             return true;
         }
-        if (preg_match('/^\d+(\.\d+)*\.?\s+\S/u', $line) && ! str_ends_with($line, '.')) {
+        if (preg_match('/^\d+(\.\d+)*\.\s+\S/u', $line) && ! str_ends_with($line, '.')) {
             return true;
         }
         $letters = preg_replace('/[^\p{L}]/u', '', $line) ?? '';
@@ -127,13 +134,22 @@ final class Chunker
         return trim(preg_replace('/^#{1,6}\s+/u', '', trim($line)) ?? $line);
     }
 
+    /** Max size of one piece; leaves room for a heading line prepended to the chunk. */
+    private function pieceLimit(): int
+    {
+        return max(1, $this->maxTokens - 21);
+    }
+
     /** @return list<string> */
     private function splitOversized(string $paragraph): array
     {
-        if (self::estimateTokens($paragraph) <= $this->maxTokens) {
+        if (self::estimateTokens($paragraph) <= $this->pieceLimit()) {
             return [$paragraph];
         }
-        $sentences = preg_split('/(?<=[.!?…])\s+/u', $paragraph) ?: [$paragraph];
+        $sentences = [];
+        foreach (preg_split('/(?<=[.!?…])\s+/u', $paragraph) ?: [$paragraph] as $s) {
+            array_push($sentences, ...(self::estimateTokens($s) > $this->pieceLimit() ? $this->splitLong($s, 0) : [$s]));
+        }
         $pieces = [];
         $current = '';
         foreach ($sentences as $s) {
@@ -143,6 +159,42 @@ final class Chunker
                 $candidate = $s;
             }
             $current = $candidate;
+        }
+        if ($current !== '') {
+            $pieces[] = $current;
+        }
+
+        return $pieces;
+    }
+
+    /**
+     * Split delimiter-less oversized text: by newline, then ';', then whitespace, finally hard by characters.
+     *
+     * @return list<string>
+     */
+    private function splitLong(string $text, int $level): array
+    {
+        if (self::estimateTokens($text) <= $this->targetTokens) {
+            return [$text];
+        }
+        if ($level >= 3) {
+            return mb_str_split($text, $this->pieceLimit() * 4);
+        }
+        [$pattern, $glue] = [["/\n/u", "\n"], ['/;/u', ';'], ['/\s+/u', ' ']][$level];
+        $pieces = [];
+        $current = '';
+        foreach (preg_split($pattern, $text) ?: [$text] as $unit) {
+            if ($unit === '') {
+                continue;
+            }
+            foreach (self::estimateTokens($unit) > $this->targetTokens ? $this->splitLong($unit, $level + 1) : [$unit] as $u) {
+                $candidate = $current === '' ? $u : $current.$glue.$u;
+                if ($current !== '' && self::estimateTokens($candidate) > $this->targetTokens) {
+                    $pieces[] = $current;
+                    $candidate = $u;
+                }
+                $current = $candidate;
+            }
         }
         if ($current !== '') {
             $pieces[] = $current;
