@@ -3139,7 +3139,7 @@ git commit -m "feat(chat): llm client contract, anthropic streaming client, fake
 
 ---
 
-### Task 12: CitationParser
+### Task 12: CitationParser ✅ (58eaa7f, рев'ю прийнято)
 
 **Files:**
 - Create: `app/Chat/CitationParser.php`, `app/Chat/ParsedCitation.php`
@@ -3156,7 +3156,7 @@ final class CitationParser {
 }
 ```
 
-- [ ] **Step 1: Тести (включно з маркером поза діапазоном, Review Focus 3)**
+- [x] **Step 1: Тести (включно з маркером поза діапазоном, Review Focus 3)**
 
 ```php
 <?php
@@ -3193,7 +3193,7 @@ it('returns nothing for an answer without markers', function () {
 });
 ```
 
-- [ ] **Step 2: Реалізація**
+- [x] **Step 2: Реалізація**
 
 ```php
 final class CitationParser
@@ -3226,7 +3226,7 @@ final class CitationParser
 
 Run: `php artisan test --filter=CitationParserTest`. Expected: 3 passed.
 
-- [ ] **Step 3: Коміт**
+- [x] **Step 3: Коміт**
 
 ```bash
 git add -A
