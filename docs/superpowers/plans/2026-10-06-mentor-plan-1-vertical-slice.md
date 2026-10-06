@@ -3735,7 +3735,7 @@ git commit -m "feat(chat): answer service with sse streaming, citations, groundi
 
 ---
 
-### Task 14: Vue 3 SPA: вхід і чат зі стрімінгом та цитатами
+### Task 14: Vue 3 SPA: вхід і чат зі стрімінгом та цитатами ✅ (e4149e7 + 12758f5, рев'ю прийнято після 1 раунду)
 
 **Files:**
 - Create: `resources/js/app.js`, `resources/js/router.js`, `resources/js/api.js`, `resources/js/sse.js`, `resources/js/stores/auth.js`, `resources/js/stores/chat.js`, `resources/js/views/LoginView.vue`, `resources/js/views/ChatView.vue`, `resources/js/components/MessageBubble.vue`, `resources/js/components/CitationPanel.vue`, `resources/js/App.vue`, `resources/views/app.blade.php`, `vitest.config.js`
@@ -3746,7 +3746,7 @@ git commit -m "feat(chat): answer service with sse streaming, citations, groundi
 - Consumes: API розділу 8 (login, me, conversations, messages SSE, chunks).
 - Produces: `parseSseChunk(buffer: string): {events: Array<{event: string, data: any}>, rest: string}`; `streamMessage(conversationId, content, handlers: {onEvent})`; Pinia store `useChatStore` з `conversations, current, messages, streaming, error, loadConversations(), openConversation(id), newConversation(), send(content)`.
 
-- [ ] **Step 1: Залежності й конфіг**
+- [x] **Step 1: Залежності й конфіг**
 
 ```bash
 npm install vue@^3.5 vue-router@^4 pinia@^3 vuetify@^3.7 @mdi/font axios
@@ -3769,7 +3769,7 @@ export default defineConfig({
 `routes/web.php`: `Route::view('/{any?}', 'app')->where('any', '^(?!api|sanctum).*$');`
 `resources/views/app.blade.php`: мінімальний HTML з `<div id="app"></div>` і `@vite('resources/js/app.js')`, `<meta name="csrf-token" content="{{ csrf_token() }}">`.
 
-- [ ] **Step 2: Тест парсера SSE (падає)**
+- [x] **Step 2: Тест парсера SSE (падає)**
 
 `resources/js/sse.test.js`:
 ```js
@@ -3790,7 +3790,7 @@ describe('parseSseChunk', () => {
 });
 ```
 
-- [ ] **Step 3: api.js і sse.js**
+- [x] **Step 3: api.js і sse.js**
 
 `resources/js/api.js`:
 ```js
@@ -3854,7 +3854,7 @@ export async function streamMessage(conversationId, content, { onEvent }) {
 
 Run: `npm run test`. Expected: sse.test.js PASS.
 
-- [ ] **Step 4: Тест стора чату (падає)**
+- [x] **Step 4: Тест стора чату (падає)**
 
 `resources/js/stores/chat.test.js`:
 ```js
@@ -3907,7 +3907,7 @@ describe('chat store send', () => {
 });
 ```
 
-- [ ] **Step 5: Стори**
+- [x] **Step 5: Стори**
 
 `resources/js/stores/auth.js`:
 ```js
@@ -3996,7 +3996,7 @@ export const useChatStore = defineStore('chat', () => {
 
 Run: `npm run test`. Expected: 4 tests PASS.
 
-- [ ] **Step 6: app.js, router, App.vue, views, components**
+- [x] **Step 6: app.js, router, App.vue, views, components**
 
 `resources/js/app.js`:
 ```js
@@ -4023,14 +4023,14 @@ createApp(App).use(createPinia()).use(router).use(createVuetify()).mount('#app')
 
 `CitationPanel.vue`: props `citation`; показує `document_title`, `page`, `quote`. Кнопка «Відкрити фрагмент» вантажить `GET /chunks/{chunk_id}` і показує повний `content`.
 
-- [ ] **Step 7: Ручна перевірка в браузері**
+- [x] **Step 7: Ручна перевірка в браузері**
 
 ```bash
 docker compose up -d && php artisan serve & php artisan queue:work --queue=ingestion & npm run dev
 ```
 Увійти як HR (сідер з Task 15), завантажити документ через `curl` або Task 15 `make demo`, потім як співробітник поставити питання й побачити стрім і цитату. `npm run build` без помилок.
 
-- [ ] **Step 8: Коміт**
+- [x] **Step 8: Коміт**
 
 ```bash
 git add -A
