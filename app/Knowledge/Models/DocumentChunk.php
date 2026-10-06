@@ -5,6 +5,11 @@ namespace App\Knowledge\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @property int $id
+ * @property int $document_id
+ * @property int|null $page
+ */
 class DocumentChunk extends Model
 {
     protected $guarded = [];

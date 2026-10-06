@@ -40,4 +40,22 @@ final class ChunkSearchRepository
             $row->page === null ? null : (int) $row->page, $row->heading, (string) $row->content, (float) $row->distance,
         ), $query->get()->all());
     }
+
+    public function findVisible(int $chunkId, User $user): ?SearchHit
+    {
+        $query = DB::table('document_chunks as c')
+            ->join('documents as d', 'd.id', '=', 'c.document_id')
+            ->whereNull('d.deleted_at')
+            ->where('c.id', $chunkId)
+            ->select(['c.id', 'c.document_id', 'd.title', 'c.page', 'c.heading', 'c.content']);
+
+        Document::visibilityWhere($query, $user, 'd');
+
+        $row = $query->first();
+
+        return $row === null ? null : new SearchHit(
+            (int) $row->id, (int) $row->document_id, (string) $row->title,
+            $row->page === null ? null : (int) $row->page, $row->heading, (string) $row->content, 0.0,
+        );
+    }
 }
