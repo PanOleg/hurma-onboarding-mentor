@@ -46,6 +46,19 @@ npm run test                      # фронтенд (Vitest)
 
 Команда `make eval` (оцінка якості відповідей) з'явиться в плані 3.
 
+## Тимчасовий безкоштовний провайдер (Groq)
+
+Поки ключ Anthropic недоступний, можна працювати через безкоштовний Groq (див. [ADR 0007](docs/adr/0007-openai-compatible-llm-driver.md)). Фрагменти документів тоді передаються стороннім провайдеру. У `.env`:
+
+```bash
+RAG_LLM_DRIVER=openai_compatible
+OPENAI_COMPAT_API_KEY=<ключ Groq>
+OPENAI_COMPAT_MODEL_ANSWER=llama-3.3-70b-versatile
+OPENAI_COMPAT_MODEL_HELPER=llama-3.1-8b-instant
+```
+
+Повернення до Claude: `RAG_LLM_DRIVER=anthropic`.
+
 ## Структура репозиторію
 
 - `app/Knowledge`: документи, завантаження та ланцюжок інжесту.

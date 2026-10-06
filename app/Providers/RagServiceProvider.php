@@ -5,6 +5,7 @@ namespace App\Providers;
 use Anthropic\Client;
 use App\Chat\Contracts\LlmClient;
 use App\Chat\Llm\AnthropicLlmClient;
+use App\Chat\Llm\OpenAiCompatibleLlmClient;
 use App\Knowledge\Chunking\Chunker;
 use App\Knowledge\Contracts\EmbeddingProvider;
 use App\Knowledge\Contracts\TextExtractor;
@@ -13,6 +14,7 @@ use App\Knowledge\Extraction\CompositeTextExtractor;
 use App\Knowledge\Extraction\HttpTextExtractor;
 use App\Knowledge\Extraction\LocalTextExtractor;
 use Illuminate\Support\ServiceProvider;
+use InvalidArgumentException;
 
 class RagServiceProvider extends ServiceProvider
 {
@@ -38,6 +40,17 @@ class RagServiceProvider extends ServiceProvider
             new Client(apiKey: (string) config('rag.anthropic.api_key')),
             config('rag.models.answer'), config('rag.models.helper'),
         ));
-        $this->app->bind(LlmClient::class, AnthropicLlmClient::class);
+        $this->app->singleton(OpenAiCompatibleLlmClient::class, fn () => new OpenAiCompatibleLlmClient(
+            (string) config('rag.openai_compatible.base_url'),
+            (string) config('rag.openai_compatible.api_key'),
+            (string) config('rag.openai_compatible.model_answer'),
+            (string) config('rag.openai_compatible.model_helper'),
+            (int) config('rag.openai_compatible.timeout'),
+        ));
+        $this->app->bind(LlmClient::class, fn ($app) => match (config('rag.llm.driver')) {
+            'anthropic' => $app->make(AnthropicLlmClient::class),
+            'openai_compatible' => $app->make(OpenAiCompatibleLlmClient::class),
+            default => throw new InvalidArgumentException('Unknown RAG_LLM_DRIVER: '.(string) config('rag.llm.driver')),
+        });
     }
 }

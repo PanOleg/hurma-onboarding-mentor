@@ -169,5 +169,6 @@ sequenceDiagram
 | 0004 | REST API + Vue SPA з Sanctum cookie | [0004-rest-api-spa-sanctum.md](adr/0004-rest-api-spa-sanctum.md) |
 | 0005 | SSE через StreamedResponse | [0005-sse-streamed-response.md](adr/0005-sse-streamed-response.md) |
 | 0006 | Grounding-перевірка після відповіді | [0006-grounding-after-answer.md](adr/0006-grounding-after-answer.md) |
+| 0007 | Другий LLM-драйвер для OpenAI-сумісних API (Groq) | [0007-openai-compatible-llm-driver.md](adr/0007-openai-compatible-llm-driver.md) |
 
 Роль: архітектор

@@ -25,6 +25,14 @@ return [
         'rewrite' => 'rewrite.v1',
         'grounding' => 'grounding.v1',
     ],
+    'llm' => ['driver' => env('RAG_LLM_DRIVER', 'anthropic')], // anthropic | openai_compatible
+    'openai_compatible' => [
+        'base_url' => env('OPENAI_COMPAT_BASE_URL', 'https://api.groq.com/openai/v1'),
+        'api_key' => env('OPENAI_COMPAT_API_KEY', env('GROQ_API_KEY')),
+        'model_answer' => env('OPENAI_COMPAT_MODEL_ANSWER', 'llama-3.3-70b-versatile'),
+        'model_helper' => env('OPENAI_COMPAT_MODEL_HELPER', 'llama-3.1-8b-instant'),
+        'timeout' => 60,
+    ],
     'anthropic' => [
         'api_key' => env('ANTHROPIC_API_KEY'),
     ],
