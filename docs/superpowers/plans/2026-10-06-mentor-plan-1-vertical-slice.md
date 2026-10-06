@@ -1078,7 +1078,7 @@ git commit -m "feat(knowledge): schema, enums, models with audience visibility (
 
 ---
 
-### Task 5: Автентифікація Sanctum SPA (login, logout, me)
+### Task 5: Автентифікація Sanctum SPA (login, logout, me) ✅ (d3900a9 + 9c00df3, рев'ю прийнято після 1 раунду)
 
 **Files:**
 - Create: `app/Http/Controllers/AuthController.php`, `app/Http/Resources/UserResource.php`
@@ -1088,7 +1088,7 @@ git commit -m "feat(knowledge): schema, enums, models with audience visibility (
 **Interfaces:**
 - Produces: маршрути `POST /api/v1/auth/login`, `POST /api/v1/auth/logout`, `GET /api/v1/me`. Група маршрутів `Route::prefix('v1')->middleware('auth:sanctum')` у `routes/api.php`, у яку наступні задачі додають ресурси. Формат помилки `{"error": {"code", "message", "details"}}` через `bootstrap/app.php` `withExceptions`.
 
-- [ ] **Step 1: Тест**
+- [x] **Step 1: Тест**
 
 ```php
 <?php
@@ -1132,7 +1132,7 @@ it('logs out', function () {
 
 Run: `php artisan test --filter=AuthTest`. Expected: FAIL (404 на маршрути).
 
-- [ ] **Step 2: Контролер і ресурс**
+- [x] **Step 2: Контролер і ресурс**
 
 `app/Http/Controllers/AuthController.php`:
 ```php
@@ -1183,7 +1183,7 @@ class AuthController extends Controller
 
 `UserResource::toArray`: `id, name, email, role, department_id, job_role`.
 
-- [ ] **Step 3: Маршрути, middleware, формат помилок**
+- [x] **Step 3: Маршрути, middleware, формат помилок**
 
 `routes/api.php`:
 ```php
@@ -1242,11 +1242,11 @@ Route::prefix('v1')->group(function () {
 
 `config/cors.php`: `paths => ['api/*', 'sanctum/csrf-cookie']`, `allowed_origins => [env('FRONTEND_URL', 'http://localhost:5173')]`, `supports_credentials => true`.
 
-- [ ] **Step 4: Запустити тести**
+- [x] **Step 4: Запустити тести**
 
 Run: `php artisan test --filter=AuthTest`. Expected: 4 passed.
 
-- [ ] **Step 5: Коміт**
+- [x] **Step 5: Коміт**
 
 ```bash
 git add -A
