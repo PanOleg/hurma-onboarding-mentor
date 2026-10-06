@@ -2,6 +2,8 @@
 
 namespace Tests;
 
+use App\Chat\Contracts\LlmClient;
+use App\Chat\Llm\FakeLlmClient;
 use App\Knowledge\Contracts\EmbeddingProvider;
 use App\Knowledge\Contracts\TextExtractor;
 use App\Knowledge\Embedding\FakeEmbeddingProvider;
@@ -22,6 +24,7 @@ abstract class TestCase extends BaseTestCase
         $this->app->bind(EmbeddingProvider::class, FakeEmbeddingProvider::class);
         $this->app->singleton(FakeTextExtractor::class);
         $this->app->bind(TextExtractor::class, FakeTextExtractor::class);
-        // Task 11 adds the LlmClient fake here.
+        $this->app->singleton(FakeLlmClient::class);
+        $this->app->bind(LlmClient::class, FakeLlmClient::class);
     }
 }

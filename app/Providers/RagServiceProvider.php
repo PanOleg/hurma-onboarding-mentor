@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use Anthropic\Client;
+use App\Chat\Contracts\LlmClient;
+use App\Chat\Llm\AnthropicLlmClient;
 use App\Knowledge\Chunking\Chunker;
 use App\Knowledge\Contracts\EmbeddingProvider;
 use App\Knowledge\Contracts\TextExtractor;
@@ -30,5 +33,11 @@ class RagServiceProvider extends ServiceProvider
         $this->app->bind(Chunker::class, fn () => new Chunker(
             config('rag.chunk.target_tokens'), config('rag.chunk.overlap_tokens'), config('rag.chunk.max_tokens'),
         ));
+
+        $this->app->singleton(AnthropicLlmClient::class, fn () => new AnthropicLlmClient(
+            new Client(apiKey: (string) config('rag.anthropic.api_key')),
+            config('rag.models.answer'), config('rag.models.helper'),
+        ));
+        $this->app->bind(LlmClient::class, AnthropicLlmClient::class);
     }
 }
