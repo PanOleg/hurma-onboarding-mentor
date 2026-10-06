@@ -32,3 +32,4 @@ Thumbs.db
 /services/embedder/__pycache__/
 /services/embedder/.pytest_cache/
 /services/embedder/tests/__pycache__/
+.playwright-mcp/
