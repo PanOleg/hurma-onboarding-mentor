@@ -1255,7 +1255,7 @@ git commit -m "feat(auth): sanctum spa login/logout/me with json error envelope"
 
 ---
 
-### Task 6: Контракти EmbeddingProvider і TextExtractor, HTTP-реалізації, фейки
+### Task 6: Контракти EmbeddingProvider і TextExtractor, HTTP-реалізації, фейки ✅ (95413d5, рев'ю прийнято)
 
 **Files:**
 - Create: `app/Knowledge/Contracts/EmbeddingProvider.php`, `app/Knowledge/Contracts/TextExtractor.php`, `app/Knowledge/Embedding/HttpEmbeddingProvider.php`, `app/Knowledge/Embedding/FakeEmbeddingProvider.php`, `app/Knowledge/Embedding/EmbeddingException.php`, `app/Knowledge/Extraction/ExtractedPage.php`, `app/Knowledge/Extraction/HttpTextExtractor.php`, `app/Knowledge/Extraction/LocalTextExtractor.php`, `app/Knowledge/Extraction/CompositeTextExtractor.php`, `app/Knowledge/Extraction/FakeTextExtractor.php`, `app/Knowledge/Extraction/ExtractionException.php`, `app/Providers/RagServiceProvider.php`
@@ -1280,7 +1280,7 @@ final readonly class ExtractedPage { public function __construct(public int $pag
 ```
 `EmbeddingException` з кодами-константами `UNAVAILABLE`, `BAD_DIMENSION`. `ExtractionException` з `UNAVAILABLE`, `UNSUPPORTED`. `FakeEmbeddingProvider::vectorFor(string $text): array` публічний, щоб тести пошуку могли передбачити вектор.
 
-- [ ] **Step 1: Unit-тест фейкового провайдера**
+- [x] **Step 1: Unit-тест фейкового провайдера**
 
 `tests/Unit/Knowledge/FakeEmbeddingProviderTest.php`:
 ```php
@@ -1310,7 +1310,7 @@ it('makes similar texts closer than unrelated ones', function () {
 });
 ```
 
-- [ ] **Step 2: Реалізація фейка**
+- [x] **Step 2: Реалізація фейка**
 
 Фейк будує вектор із хешів слів (bag of words у 384 кошики), тому схожі тексти близькі, а різні далекі. Це дає реалістичну поведінку пошуку в тестах без моделі.
 
@@ -1359,7 +1359,7 @@ final class FakeEmbeddingProvider implements EmbeddingProvider
 
 Run: `php artisan test --filter=FakeEmbeddingProviderTest`. Expected: 2 passed.
 
-- [ ] **Step 3: Тест HTTP-провайдера з Http::fake (включно з перевіркою розміру вектора, Review Focus 5)**
+- [x] **Step 3: Тест HTTP-провайдера з Http::fake (включно з перевіркою розміру вектора, Review Focus 5)**
 
 `tests/Feature/Knowledge/HttpEmbeddingProviderTest.php`:
 ```php
@@ -1403,7 +1403,7 @@ it('throws UNAVAILABLE on connection error or 5xx', function () {
 });
 ```
 
-- [ ] **Step 4: Реалізація HTTP-провайдера і винятку**
+- [x] **Step 4: Реалізація HTTP-провайдера і винятку**
 
 ```php
 <?php
@@ -1481,7 +1481,7 @@ final class HttpEmbeddingProvider implements EmbeddingProvider
 }
 ```
 
-- [ ] **Step 5: Екстрактори і тест**
+- [x] **Step 5: Екстрактори і тест**
 
 `ExtractedPage` як у Interfaces. `ExtractionException` за тим самим шаблоном, що `EmbeddingException`, коди `UNAVAILABLE = 'extractor_unavailable'`, `UNSUPPORTED = 'unsupported_format'`.
 
@@ -1529,7 +1529,7 @@ it('throws UNSUPPORTED for unknown mime in composite', function () {
 });
 ```
 
-- [ ] **Step 6: RagServiceProvider і прив'язка фейків у тестах**
+- [x] **Step 6: RagServiceProvider і прив'язка фейків у тестах**
 
 `app/Providers/RagServiceProvider.php`:
 ```php
@@ -1574,11 +1574,11 @@ $this->app->bind(TextExtractor::class, FakeTextExtractor::class);
 ```
 Тести, яким потрібна HTTP-реалізація, резолвлять конкретний клас (`app(HttpEmbeddingProvider::class)`), як у тестах вище.
 
-- [ ] **Step 7: Запустити всі тести задачі**
+- [x] **Step 7: Запустити всі тести задачі**
 
 Run: `php artisan test --filter='FakeEmbeddingProviderTest|HttpEmbeddingProviderTest|TextExtractorTest'`. Expected: 9 passed.
 
-- [ ] **Step 8: Коміт**
+- [x] **Step 8: Коміт**
 
 ```bash
 git add -A
