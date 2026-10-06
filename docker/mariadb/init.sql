@@ -1,0 +1,3 @@
+CREATE DATABASE IF NOT EXISTS mentor_test;
+GRANT ALL PRIVILEGES ON mentor_test.* TO 'mentor'@'%';
+FLUSH PRIVILEGES;

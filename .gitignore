@@ -30,3 +30,5 @@ Thumbs.db
 /storage/app/knowledge/
 /services/embedder/.venv/
 /services/embedder/__pycache__/
+/services/embedder/.pytest_cache/
+/services/embedder/tests/__pycache__/
