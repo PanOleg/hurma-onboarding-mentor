@@ -41,6 +41,10 @@ export const useChatStore = defineStore('chat', () => {
           else if (event === 'error') { assistant.status = 'failed'; error.value = data.message; }
         },
       });
+      if (assistant.status === 'streaming') {
+        assistant.status = 'failed';
+        error.value = 'З’єднання обірвалося, відповідь не завершена.';
+      }
     } catch (e) {
       assistant.status = 'failed';
       error.value = errorMessage(e);

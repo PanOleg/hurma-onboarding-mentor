@@ -1,6 +1,6 @@
 export function parseSseChunk(buffer) {
   const events = [];
-  let rest = buffer;
+  let rest = buffer.replace(/\r\n/g, '\n');
   let idx;
   while ((idx = rest.indexOf('\n\n')) !== -1) {
     const frame = rest.slice(0, idx);

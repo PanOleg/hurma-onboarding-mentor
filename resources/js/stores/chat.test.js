@@ -44,4 +44,20 @@ describe('chat store send', () => {
     expect(store.messages[1].status).toBe('failed');
     expect(store.error).toBe('Сервіс недоступний');
   });
+
+  it('marks the assistant message failed when the stream ends without done or error', async () => {
+    http.post.mockResolvedValue({ data: { data: { id: 7 } } });
+    streamMessage.mockImplementation(async (_i, _c, { onEvent }) => {
+      onEvent({ event: 'message', data: { id: 1 } });
+      onEvent({ event: 'token', data: { text: 'Частк' } });
+    });
+    const store = useChatStore();
+    await store.newConversation();
+    await store.send('x');
+
+    expect(store.messages[1].status).toBe('failed');
+    expect(store.messages[1].content).toBe('Частк');
+    expect(store.error).toBe('З’єднання обірвалося, відповідь не завершена.');
+    expect(store.streaming).toBe(false);
+  });
 });
