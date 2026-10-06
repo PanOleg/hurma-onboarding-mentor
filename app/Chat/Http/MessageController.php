@@ -15,6 +15,7 @@ final class MessageController extends Controller
         $content = $request->string('content')->toString();
 
         return response()->stream(function () use ($conversation, $content, $service) {
+            ignore_user_abort(true);
             // Tests capture the stream through their own output buffer, which must stay intact.
             while (! app()->runningUnitTests() && ob_get_level() > 0) {
                 ob_end_flush();

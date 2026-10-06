@@ -22,6 +22,6 @@ Route::prefix('v1')->group(function () {
         Route::post('conversations', [ConversationController::class, 'store']);
         Route::get('conversations/{conversation}/messages', [ConversationController::class, 'messages']);
         Route::post('conversations/{conversation}/messages', [MessageController::class, 'store'])->middleware('throttle:chat');
-        Route::get('chunks/{id}', [ChunkController::class, 'show']);
+        Route::get('chunks/{id}', [ChunkController::class, 'show'])->whereNumber('id');
     });
 });

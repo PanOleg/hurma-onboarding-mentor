@@ -14,13 +14,16 @@ final class FakeLlmClient implements LlmClient
 
     public ?LlmException $throws = null;
 
+    /** When set, `throws` applies only to this method name. */
+    public ?string $throwsOn = null;
+
     /** @var array<string, list<array<string, string>>> */
     public array $calls = [];
 
     public function streamAnswer(string $system, string $user, callable $onDelta): AnswerResult
     {
         $this->record('streamAnswer', $system, $user);
-        $this->maybeThrow();
+        $this->maybeThrow(__FUNCTION__);
         $parts = preg_split('/(?<=\s)/u', $this->nextAnswer) ?: [$this->nextAnswer];
         foreach ($parts as $part) {
             if ($part !== '') {
@@ -34,7 +37,7 @@ final class FakeLlmClient implements LlmClient
     public function rewriteQuestion(string $system, string $user): string
     {
         $this->record('rewriteQuestion', $system, $user);
-        $this->maybeThrow();
+        $this->maybeThrow(__FUNCTION__);
         if ($this->nextRewrite !== null) {
             return $this->nextRewrite;
         }
@@ -46,7 +49,7 @@ final class FakeLlmClient implements LlmClient
     public function checkGrounding(string $system, string $user): GroundingResult
     {
         $this->record('checkGrounding', $system, $user);
-        $this->maybeThrow();
+        $this->maybeThrow(__FUNCTION__);
         $r = new GroundingResult;
         $r->grounded = $this->nextGrounded;
         $r->reason = 'fake';
@@ -59,9 +62,9 @@ final class FakeLlmClient implements LlmClient
         $this->calls[$method][] = ['system' => $system, 'user' => $user];
     }
 
-    private function maybeThrow(): void
+    private function maybeThrow(string $method): void
     {
-        if ($this->throws !== null) {
+        if ($this->throws !== null && ($this->throwsOn === null || $this->throwsOn === $method)) {
             throw $this->throws;
         }
     }

@@ -161,3 +161,21 @@ it('forbids posting into another user conversation', function () {
     $other = Conversation::factory()->create();
     $this->actingAs($this->user)->postJson("/api/v1/conversations/{$other->id}/messages", ['content' => 'hi'])->assertForbidden();
 });
+
+it('keeps the streamed answer completed when the grounding check fails', function () {
+    seedKnowledge(['Кожен працівник має 24 дні відпустки.']);
+    $fake = app(FakeLlmClient::class);
+    $fake->nextAnswer = 'Відпустка 24 дні [1].';
+    $fake->throws = new LlmException(LlmException::UNAVAILABLE, 'down');
+    $fake->throwsOn = 'checkGrounding';
+
+    $response = $this->actingAs($this->user)->post("/api/v1/conversations/{$this->conversation->id}/messages", ['content' => 'дні відпустки працівник']);
+
+    $events = sseEvents($response->streamedContent());
+    expect(end($events)['event'])->toBe('done');
+    $assistant = Message::where('role', 'assistant')->first();
+    expect($assistant->status)->toBe(MessageStatus::Completed)
+        ->and($assistant->content)->toBe('Відпустка 24 дні [1].')
+        ->and($assistant->grounded)->toBeFalse()
+        ->and(KnowledgeGap::first()->status)->toBe('needs_review');
+});

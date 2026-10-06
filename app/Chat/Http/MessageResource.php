@@ -29,7 +29,7 @@ final class MessageResource extends JsonResource
                 'document_id' => $c->chunk?->document_id,
                 'document_title' => $c->chunk?->document?->title,
                 'page' => $c->chunk?->page,
-                'deleted' => $c->chunk === null,
+                'deleted' => $c->chunk === null || $c->chunk->document === null,
             ])->all(),
         ];
     }

@@ -56,7 +56,7 @@ final class AnswerService
                 $sse->event('token', ['text' => self::NO_ANSWER_TEXT]);
                 $sse->event('citations', []);
                 $assistant->forceFill(['content' => self::NO_ANSWER_TEXT, 'status' => MessageStatus::NoAnswer, 'latency_ms' => $this->ms($startedAt)])->save();
-                $this->gaps->recordNoAnswer($question);
+                $this->recordGap($question, false);
                 $sse->event('done', ['status' => 'no_answer', 'grounded' => null, 'input_tokens' => 0, 'output_tokens' => 0, 'latency_ms' => $assistant->latency_ms]);
 
                 return $assistant;
@@ -64,6 +64,12 @@ final class AnswerService
 
             $prompt = $this->prompts->answer($question, $hits);
             $result = $this->llm->streamAnswer($prompt['system'], $prompt['user'], fn (string $delta) => $sse->event('token', ['text' => $delta]));
+
+            // Persist the streamed answer first: grounding must never block or discard the shown text.
+            $assistant->forceFill([
+                'content' => $result->text, 'status' => MessageStatus::Completed, 'grounded' => null, 'model' => $result->model,
+                'input_tokens' => $result->inputTokens, 'output_tokens' => $result->outputTokens,
+            ])->save();
 
             $parsed = $this->citations->parse($result->text, $hits);
             if ($parsed['invalidMarkers'] !== []) {
@@ -79,17 +85,19 @@ final class AnswerService
 
             $grounded = $parsed['citations'] !== [];
             if ($grounded) {
-                $g = $this->prompts->grounding($result->text, $hits);
-                $grounded = $this->llm->checkGrounding($g['system'], $g['user'])->grounded;
+                try {
+                    $g = $this->prompts->grounding($result->text, $hits);
+                    $grounded = $this->llm->checkGrounding($g['system'], $g['user'])->grounded;
+                } catch (Throwable $e) {
+                    Log::warning('rag.grounding_check_failed', ['message_id' => $assistant->id, 'exception' => $e]);
+                    $grounded = false;
+                }
             }
             if (! $grounded) {
-                $this->gaps->recordNeedsReview($question);
+                $this->recordGap($question, true);
             }
 
-            $assistant->forceFill([
-                'content' => $result->text, 'status' => MessageStatus::Completed, 'grounded' => $grounded, 'model' => $result->model,
-                'input_tokens' => $result->inputTokens, 'output_tokens' => $result->outputTokens, 'latency_ms' => $this->ms($startedAt),
-            ])->save();
+            $assistant->forceFill(['grounded' => $grounded, 'latency_ms' => $this->ms($startedAt)])->save();
             $sse->event('done', ['status' => 'completed', 'grounded' => $grounded, 'input_tokens' => $result->inputTokens,
                 'output_tokens' => $result->outputTokens, 'latency_ms' => $assistant->latency_ms]);
         } catch (LlmException|EmbeddingException $e) {
@@ -105,7 +113,17 @@ final class AnswerService
     private function fail(Message $assistant, SseWriter $sse, string $code, string $detail, int $startedAt): void
     {
         $assistant->forceFill(['status' => MessageStatus::Failed, 'latency_ms' => $this->ms($startedAt)])->save();
-        $sse->event('error', ['code' => $code, 'message' => $this->userMessage($code), 'detail' => mb_substr($detail, 0, 300)]);
+        Log::warning('rag.answer_error', ['message_id' => $assistant->id, 'code' => $code, 'detail' => mb_substr($detail, 0, 300)]);
+        $sse->event('error', ['code' => $code, 'message' => $this->userMessage($code)]);
+    }
+
+    private function recordGap(string $question, bool $needsReview): void
+    {
+        try {
+            $needsReview ? $this->gaps->recordNeedsReview($question) : $this->gaps->recordNoAnswer($question);
+        } catch (Throwable $e) {
+            Log::warning('rag.gap_record_failed', ['exception' => $e]);
+        }
     }
 
     private function userMessage(string $code): string
