@@ -1587,7 +1587,7 @@ git commit -m "feat(knowledge): embedding and extraction contracts with http and
 
 ---
 
-### Task 7: Chunker
+### Task 7: Chunker ✅ (26b4a1a + ccfbca5, рев'ю прийнято після 1 раунду)
 
 **Files:**
 - Create: `app/Knowledge/Chunking/Chunk.php`, `app/Knowledge/Chunking/Chunker.php`
@@ -1605,7 +1605,7 @@ final class Chunker {
 }
 ```
 
-- [ ] **Step 1: Тести**
+- [x] **Step 1: Тести**
 
 ```php
 <?php
@@ -1695,7 +1695,7 @@ it('detects numbered and uppercase headings in plain text from pdf', function ()
 
 Run: `php artisan test --filter=ChunkerTest`. Expected: FAIL (клас відсутній).
 
-- [ ] **Step 2: Реалізація**
+- [x] **Step 2: Реалізація**
 
 Алгоритм: нормалізувати текст кожної сторінки (BOM, CRLF), розбити на блоки по порожніх рядках, кожен блок класифікувати як заголовок або абзац, абзаци понад `maxTokens` різати по реченнях, далі жадібно збирати блоки у чанк до `targetTokens`; новий заголовок завжди закриває поточний чанк; при відкритті наступного чанка додавати хвіст попереднього на `overlapTokens * 4` символів.
 
@@ -1844,11 +1844,11 @@ final class Chunker
 }
 ```
 
-- [ ] **Step 3: Запустити тести**
+- [x] **Step 3: Запустити тести**
 
 Run: `php artisan test --filter=ChunkerTest`. Expected: 8 passed. Якщо тест перекриття падає, перевірити, що `prevTail` скидається лише на заголовку.
 
-- [ ] **Step 4: Коміт**
+- [x] **Step 4: Коміт**
 
 ```bash
 git add app/Knowledge/Chunking tests/Unit/Knowledge/ChunkerTest.php
