@@ -3235,7 +3235,7 @@ git commit -m "feat(chat): citation parser with out-of-range marker handling (AC
 
 ---
 
-### Task 13: AnswerService, SSE, прогалини, ендпоінти розмов і повідомлень
+### Task 13: AnswerService, SSE, прогалини, ендпоінти розмов і повідомлень ✅ (8a989b8 + c51bd7e, рев'ю прийнято після 1 раунду)
 
 **Files:**
 - Create: `app/Insights/QuestionNormalizer.php`, `app/Insights/KnowledgeGapRecorder.php`, `app/Chat/SseWriter.php`, `app/Chat/AnswerService.php`, `app/Chat/Http/ConversationController.php`, `app/Chat/Http/MessageController.php`, `app/Chat/Http/StoreMessageRequest.php`, `app/Chat/Http/ConversationResource.php`, `app/Chat/Http/MessageResource.php`, `app/Chat/Policies/ConversationPolicy.php`
@@ -3262,7 +3262,7 @@ final class AnswerService {
 ```
 Маршрути: `GET/POST /conversations`, `GET /conversations/{conversation}/messages`, `POST /conversations/{conversation}/messages` (SSE, `throttle:chat` = 20/хв), `GET /chunks/{id}`.
 
-- [ ] **Step 1: Unit-тест нормалізатора**
+- [x] **Step 1: Unit-тест нормалізатора**
 
 ```php
 <?php
@@ -3278,7 +3278,7 @@ it('normalizes case, whitespace and trailing punctuation', function () {
 ```
 Реалізація: `mb_strtolower(trim)`, `preg_replace('/\s+/u', ' ')`, `preg_replace('/[\s?!.,;:…]+$/u', '')`, `mb_substr(..., 0, 255)`.
 
-- [ ] **Step 2: Feature-тести потоку відповіді (AC-6, AC-7, AC-8, Review Focus 3, 4)**
+- [x] **Step 2: Feature-тести потоку відповіді (AC-6, AC-7, AC-8, Review Focus 3, 4)**
 
 `tests/Feature/Chat/AnswerFlowTest.php`:
 ```php
@@ -3474,7 +3474,7 @@ it('hides other users conversations', function () {
 
 Run: `php artisan test --filter='QuestionNormalizerTest|AnswerFlowTest|ConversationApiTest'`. Expected: FAIL.
 
-- [ ] **Step 3: KnowledgeGapRecorder, SseWriter**
+- [x] **Step 3: KnowledgeGapRecorder, SseWriter**
 
 ```php
 final class KnowledgeGapRecorder
@@ -3535,7 +3535,7 @@ final class SseWriter
 }
 ```
 
-- [ ] **Step 4: AnswerService**
+- [x] **Step 4: AnswerService**
 
 ```php
 <?php
@@ -3666,7 +3666,7 @@ final class AnswerService
 ```
 Поведінка «обрив клієнтом» зі спеки (розділ 7.2) реалізується в контролері: якщо `connection_aborted()` стає істинним під час стріму, SseWriter лише перестає писати, а сервіс дописує повідомлення як є. Для плану 1 це покривається тим, що `fail` не викликається, а `done` просто не доходить. Повну обробку з позначкою `client_disconnected` робить план 2 разом з історією розмов в UI.
 
-- [ ] **Step 5: Контролери, Policy, Form Request, ресурси, маршрути**
+- [x] **Step 5: Контролери, Policy, Form Request, ресурси, маршрути**
 
 `ConversationPolicy::view/update(User $user, Conversation $c)`: `$c->user_id === $user->id`. Зареєструвати в `AppServiceProvider`.
 
@@ -3722,11 +3722,11 @@ Route::get('chunks/{id}', [ChunkController::class, 'show']);
 
 `App\Knowledge\Http\ChunkController::show(Request $request, int $id)`: `DB::table('document_chunks as c')->join('documents as d', ...)->whereNull('d.deleted_at')->where('c.id', $id)` + `Document::visibilityWhere($query, $request->user(), 'd')` + `select(c.id, c.document_id, d.title, c.page, c.heading, c.content)`; 404, якщо немає. Так, це третій raw SELECT до чанків; щоб не порушити правило «raw SELECT лише в репозиторії», додати в `ChunkSearchRepository` метод `findVisible(int $chunkId, User $user): ?SearchHit` (distance = 0.0) і викликати його з контролера. Тест на `GET /chunks/{id}` для чужої аудиторії додає план 2 (AC-5 UI), але метод писати тут.
 
-- [ ] **Step 6: Запустити тести**
+- [x] **Step 6: Запустити тести**
 
 Run: `php artisan test --filter='QuestionNormalizerTest|AnswerFlowTest|ConversationApiTest'`. Expected: 13 passed. Потім повний прогін `php artisan test`: усе зелене. `vendor/bin/pint`, `vendor/bin/phpstan analyse`.
 
-- [ ] **Step 7: Коміт**
+- [x] **Step 7: Коміт**
 
 ```bash
 git add -A
