@@ -2326,7 +2326,7 @@ git commit -m "feat(knowledge): ingestion chain extract->chunk->embed with runs 
 
 ---
 
-### Task 9: API документів: завантаження, список, перегляд, Policy
+### Task 9: API документів: завантаження, список, перегляд, Policy ✅ (53ca19f, рев'ю прийнято)
 
 **Files:**
 - Create: `app/Knowledge/Http/DocumentController.php`, `app/Knowledge/Http/StoreDocumentRequest.php`, `app/Knowledge/Http/DocumentResource.php`, `app/Knowledge/Policies/DocumentPolicy.php`, `app/Knowledge/Ingestion/DocumentUploader.php`
@@ -2337,7 +2337,7 @@ git commit -m "feat(knowledge): ingestion chain extract->chunk->embed with runs 
 - Consumes: `DocumentIngestionService::dispatchChain`.
 - Produces: `DocumentUploader::upload(UploadedFile $file, string $title, AudienceType $type, ?string $value, User $by): array{document: Document, created: bool}`. Маршрути `GET /documents`, `POST /documents`, `GET /documents/{document}`. `POST /documents/{id}/retry`, `DELETE`, `/chunks` лишаються для плану 2.
 
-- [ ] **Step 1: Тести**
+- [x] **Step 1: Тести**
 
 ```php
 <?php
@@ -2417,7 +2417,7 @@ it('lists documents with status filter and shows one with ingestion runs', funct
 
 Run: `php artisan test --filter=DocumentApiTest`. Expected: FAIL.
 
-- [ ] **Step 2: Form Request, Policy, Uploader**
+- [x] **Step 2: Form Request, Policy, Uploader**
 
 `StoreDocumentRequest::rules()`:
 ```php
@@ -2480,7 +2480,7 @@ final class DocumentUploader
 }
 ```
 
-- [ ] **Step 3: Контролер, ресурс, маршрути**
+- [x] **Step 3: Контролер, ресурс, маршрути**
 
 `DocumentController`:
 ```php
@@ -2522,11 +2522,11 @@ Route::post('documents', [DocumentController::class, 'store']);
 Route::get('documents/{document}', [DocumentController::class, 'show']);
 ```
 
-- [ ] **Step 4: Запустити тести**
+- [x] **Step 4: Запустити тести**
 
 Run: `php artisan test --filter=DocumentApiTest`. Expected: 6 passed. Якщо тест на 403 для `POST` з порожнім тілом повертає 422, перевірити, що `authorize()` у Form Request спрацьовує до валідації (у Laravel так і є).
 
-- [ ] **Step 5: Коміт**
+- [x] **Step 5: Коміт**
 
 ```bash
 git add -A
