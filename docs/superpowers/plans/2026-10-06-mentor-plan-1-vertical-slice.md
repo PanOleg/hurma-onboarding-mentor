@@ -84,7 +84,7 @@ tests/Unit/..., tests/Feature/..., tests/Fixtures/...
 
 ---
 
-### Task 1: Документи процесу, CLAUDE.md, skills
+### Task 1: Документи процесу, CLAUDE.md, skills ✅ (c1e9a18, рев'ю прийнято)
 
 **Files:**
 - Create: `CLAUDE.md`, `.claude/skills/laravel-feature/SKILL.md`, `.claude/skills/queued-job/SKILL.md`, `.claude/skills/vue-screen/SKILL.md`, `.claude/skills/prompt-change/SKILL.md`, `.claude/skills/adr/SKILL.md`
@@ -93,7 +93,7 @@ tests/Unit/..., tests/Feature/..., tests/Fixtures/...
 **Interfaces:**
 - Produces: правила для агента, якими керуються всі наступні задачі. Назви skills використовуються в журналі сесій.
 
-- [ ] **Step 1: CLAUDE.md**
+- [x] **Step 1: CLAUDE.md**
 
 ```markdown
 # Onboarding Mentor (Hurma showcase)
@@ -125,7 +125,7 @@ PHP 8.4, Laravel 13, Pest 5, MariaDB 11.8 (Docker, port 3307 for tests), Redis, 
 .claude/skills/laravel-feature, queued-job, vue-screen, prompt-change, adr. Use the matching skill for the task type.
 ```
 
-- [ ] **Step 2: Skills (п'ять файлів, кожен один екран)**
+- [x] **Step 2: Skills (п'ять файлів, кожен один екран)**
 
 `.claude/skills/laravel-feature/SKILL.md`:
 ```markdown
@@ -197,25 +197,25 @@ File docs/adr/NNNN-<slug>.md, NNNN = next number. Sections, Ukrainian:
 Link the ADR from docs/02-architecture.md table. Commit `docs(adr): NNNN <slug>`.
 ```
 
-- [ ] **Step 3: docs/00-brief.md (продакт)**
+- [x] **Step 3: docs/00-brief.md (продакт)**
 
 Зміст: розділи 1–3 спеки, переписані для нетехнічного читача, плюс метрики успіху продукту: частка питань з відповіддю ≥ 80 %, час до відповіді < 5 с, кількість закритих прогалин на місяць. Підпис: «Роль: продакт».
 
-- [ ] **Step 4: docs/02-architecture.md (архітектор)**
+- [x] **Step 4: docs/02-architecture.md (архітектор)**
 
 Скопіювати розділи 5–7 спеки (діаграми Mermaid включно), додати таблицю ADR з посиланнями на файли. Підпис: «Роль: архітектор».
 
-- [ ] **Step 5: Шість ADR за шаблоном skill adr**
+- [x] **Step 5: Шість ADR за шаблоном skill adr**
 
 Назви й суть з таблиці 5.2 спеки: 0001 Laravel володіє RAG; 0002 MariaDB Vector як сховище (у наслідках: індекс лише ORDER BY + LIMIT, тому підзапит кандидатів); 0003 локальні ембединги через fastembed (альтернативи Voyage, OpenAI; наслідок: драйвер для заміни); 0004 REST API + SPA з Sanctum cookie; 0005 SSE через StreamedResponse; 0006 grounding після відповіді.
 
-- [ ] **Step 6: docs/process/workflow.md і перший журнал сесії**
+- [x] **Step 6: docs/process/workflow.md і перший журнал сесії**
 
 `workflow.md`: чотири кроки циклу з розділу 16 спеки, список skills, правило запису в журнал: один рядок на виправлення у форматі `| задача | що зробив агент не так | яке правило додано |`.
 
 `docs/process/sessions/2026-10-06-plan-1.md`: заголовок, таблиця з трьома колонками, порожня, і рядок «Старт плану 1».
 
-- [ ] **Step 7: Коміт**
+- [x] **Step 7: Коміт**
 
 ```bash
 git add CLAUDE.md .claude docs
@@ -224,7 +224,7 @@ git commit -m "docs(process): brief, architecture, ADR 0001-0006, CLAUDE.md, age
 
 ---
 
-### Task 2: Скаффолд Laravel 13 + Pest 5 + конфіг rag
+### Task 2: Скаффолд Laravel 13 + Pest 5 + конфіг rag ✅ (1d92d97 + b004aae, рев'ю прийнято після 1 раунду)
 
 **Files:**
 - Create: Laravel-скелет у корені, `config/rag.php`, `.env.example` (доповнити), `.env.testing`, `tests/TestCase.php` (доповнити), `phpstan.neon`
@@ -233,7 +233,7 @@ git commit -m "docs(process): brief, architecture, ADR 0001-0006, CLAUDE.md, age
 **Interfaces:**
 - Produces: `config('rag.*')` ключі: `top_k`, `candidate_limit`, `max_distance`, `chunk.target_tokens`, `chunk.overlap_tokens`, `embedder.url`, `embedder.timeout_embed`, `embedder.timeout_extract`, `embedding_dim`, `models.answer`, `models.helper`, `prompts.answer`, `prompts.rewrite`, `prompts.grounding`, `anthropic.api_key`.
 
-- [ ] **Step 1: Створити скелет у порожній тимчасовій папці й перенести в корінь**
+- [x] **Step 1: Створити скелет у порожній тимчасовій папці й перенести в корінь**
 
 ```bash
 cd /Users/ok/PhpstormProjects/HurmaSystem
@@ -256,7 +256,7 @@ vendor/bin/pest --init
 
 Очікування: `php artisan --version` показує `Laravel Framework 13.x`, `vendor/bin/pest --version` показує 5.x.
 
-- [ ] **Step 2: config/rag.php**
+- [x] **Step 2: config/rag.php**
 
 ```php
 <?php
@@ -296,7 +296,7 @@ return [
 ];
 ```
 
-- [ ] **Step 3: .env.example і .env.testing**
+- [x] **Step 3: .env.example і .env.testing**
 
 Додати в `.env.example` (значення порожні або локальні):
 ```
@@ -340,7 +340,7 @@ ANTHROPIC_API_KEY=
 
 Скопіювати `.env.example` у `.env` локально й заповнити `DB_PASSWORD=mentor`, `DB_PORT=3307` (порт із Compose у Task 3).
 
-- [ ] **Step 4: tests/TestCase.php з прив'язкою фейків**
+- [x] **Step 4: tests/TestCase.php з прив'язкою фейків**
 
 Фейки з'являться в Task 6 і Task 11, тому тут лише каркас, який розширимо:
 
@@ -368,7 +368,7 @@ abstract class TestCase extends BaseTestCase
 
 У `tests/Pest.php` переконатися, що `pest()->extend(Tests\TestCase::class)->use(Illuminate\Foundation\Testing\RefreshDatabase::class)->in('Feature');`.
 
-- [ ] **Step 5: phpstan.neon**
+- [x] **Step 5: phpstan.neon**
 
 ```neon
 includes:
@@ -378,7 +378,7 @@ parameters:
     level: 6
 ```
 
-- [ ] **Step 6: Smoke-тест конфігу**
+- [x] **Step 6: Smoke-тест конфігу**
 
 `tests/Unit/ConfigTest.php`:
 ```php
@@ -396,7 +396,7 @@ it('exposes rag config defaults', function () {
 
 Run: `php artisan test --filter=ConfigTest`. Expected: PASS (Unit-тести не потребують бази).
 
-- [ ] **Step 7: Коміт**
+- [x] **Step 7: Коміт**
 
 ```bash
 git add -A
@@ -405,7 +405,7 @@ git commit -m "chore: scaffold Laravel 13 with Pest 5, Sanctum, Anthropic SDK, r
 
 ---
 
-### Task 3: Docker Compose (mariadb, redis, embedder) і Python-сайдкар
+### Task 3: Docker Compose (mariadb, redis, embedder) і Python-сайдкар ✅ (09105d8, рев'ю прийнято)
 
 **Files:**
 - Create: `docker-compose.yml`, `services/embedder/app.py`, `services/embedder/requirements.txt`, `services/embedder/Dockerfile`, `services/embedder/tests/test_api.py`, `services/embedder/pytest.ini`, `Makefile`
@@ -413,7 +413,7 @@ git commit -m "chore: scaffold Laravel 13 with Pest 5, Sanctum, Anthropic SDK, r
 **Interfaces:**
 - Produces: HTTP-контракт сайдкара з розділу 9 спеки: `POST /embed {texts, kind}` → `{vectors, model, dim}`; `POST /extract-text` multipart → `{pages:[{page,text}], meta:{pages_count,title}}`; `GET /health`. MariaDB на `127.0.0.1:3307`, Redis на `6379`, embedder на `8100`.
 
-- [ ] **Step 1: docker-compose.yml**
+- [x] **Step 1: docker-compose.yml**
 
 ```yaml
 services:
@@ -464,7 +464,7 @@ GRANT ALL PRIVILEGES ON mentor_test.* TO 'mentor'@'%';
 FLUSH PRIVILEGES;
 ```
 
-- [ ] **Step 2: Makefile**
+- [x] **Step 2: Makefile**
 
 ```makefile
 .PHONY: up down test seed demo eval
@@ -483,7 +483,7 @@ eval:
 	php artisan rag:eval
 ```
 
-- [ ] **Step 3: Тести сайдкара (падають, бо app.py ще немає)**
+- [x] **Step 3: Тести сайдкара (падають, бо app.py ще немає)**
 
 `services/embedder/requirements.txt`:
 ```
@@ -587,14 +587,14 @@ def test_extract_text_rejects_png():
     assert r.status_code == 422
 ```
 
-- [ ] **Step 4: Запустити тести, переконатися, що падають**
+- [x] **Step 4: Запустити тести, переконатися, що падають**
 
 ```bash
 cd services/embedder && python3 -m venv .venv && . .venv/bin/activate && pip install -r requirements.txt && pytest -q
 ```
 Expected: FAIL з `ModuleNotFoundError: No module named 'app'`.
 
-- [ ] **Step 5: services/embedder/app.py**
+- [x] **Step 5: services/embedder/app.py**
 
 ```python
 import io
@@ -687,11 +687,11 @@ def _extract_docx(data: bytes):
     return {"pages": [{"page": 1, "text": text}], "meta": {"pages_count": 1, "title": d.core_properties.title or None}}
 ```
 
-- [ ] **Step 6: Запустити тести**
+- [x] **Step 6: Запустити тести**
 
 Run: `cd services/embedder && pytest -q`. Expected: 7 passed (перший запуск завантажує модель з Hugging Face, це 1–2 хвилини).
 
-- [ ] **Step 7: Dockerfile з вшитою моделлю**
+- [x] **Step 7: Dockerfile з вшитою моделлю**
 
 ```dockerfile
 FROM python:3.12-slim
@@ -708,7 +708,7 @@ CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8100"]
 
 Run: `docker compose up -d --build && sleep 60 && curl -s localhost:8100/health`. Expected: `{"status":"ok","model":"intfloat/multilingual-e5-small","dim":384}`. Перевірка MariaDB: `docker compose exec mariadb mariadb -umentor -pmentor -e "SELECT VEC_DISTANCE_COSINE(VEC_FromText('[1,0]'), VEC_FromText('[0,1]'))"`. Expected: 1.
 
-- [ ] **Step 8: Коміт**
+- [x] **Step 8: Коміт**
 
 ```bash
 git add docker-compose.yml docker Makefile services/embedder
