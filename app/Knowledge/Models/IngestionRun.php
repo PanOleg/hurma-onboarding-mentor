@@ -6,6 +6,9 @@ use App\Knowledge\Enums\IngestionStep;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @property IngestionStep $step
+ */
 class IngestionRun extends Model
 {
     protected $guarded = [];
