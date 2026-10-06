@@ -84,7 +84,7 @@ tests/Unit/..., tests/Feature/..., tests/Fixtures/...
 
 ---
 
-### Task 1: Документи процесу, CLAUDE.md, skills
+### Task 1: Документи процесу, CLAUDE.md, skills ✅ (c1e9a18, рев'ю прийнято)
 
 **Files:**
 - Create: `CLAUDE.md`, `.claude/skills/laravel-feature/SKILL.md`, `.claude/skills/queued-job/SKILL.md`, `.claude/skills/vue-screen/SKILL.md`, `.claude/skills/prompt-change/SKILL.md`, `.claude/skills/adr/SKILL.md`
@@ -93,7 +93,7 @@ tests/Unit/..., tests/Feature/..., tests/Fixtures/...
 **Interfaces:**
 - Produces: правила для агента, якими керуються всі наступні задачі. Назви skills використовуються в журналі сесій.
 
-- [ ] **Step 1: CLAUDE.md**
+- [x] **Step 1: CLAUDE.md**
 
 ```markdown
 # Onboarding Mentor (Hurma showcase)
@@ -125,7 +125,7 @@ PHP 8.4, Laravel 13, Pest 5, MariaDB 11.8 (Docker, port 3307 for tests), Redis, 
 .claude/skills/laravel-feature, queued-job, vue-screen, prompt-change, adr. Use the matching skill for the task type.
 ```
 
-- [ ] **Step 2: Skills (п'ять файлів, кожен один екран)**
+- [x] **Step 2: Skills (п'ять файлів, кожен один екран)**
 
 `.claude/skills/laravel-feature/SKILL.md`:
 ```markdown
@@ -197,25 +197,25 @@ File docs/adr/NNNN-<slug>.md, NNNN = next number. Sections, Ukrainian:
 Link the ADR from docs/02-architecture.md table. Commit `docs(adr): NNNN <slug>`.
 ```
 
-- [ ] **Step 3: docs/00-brief.md (продакт)**
+- [x] **Step 3: docs/00-brief.md (продакт)**
 
 Зміст: розділи 1–3 спеки, переписані для нетехнічного читача, плюс метрики успіху продукту: частка питань з відповіддю ≥ 80 %, час до відповіді < 5 с, кількість закритих прогалин на місяць. Підпис: «Роль: продакт».
 
-- [ ] **Step 4: docs/02-architecture.md (архітектор)**
+- [x] **Step 4: docs/02-architecture.md (архітектор)**
 
 Скопіювати розділи 5–7 спеки (діаграми Mermaid включно), додати таблицю ADR з посиланнями на файли. Підпис: «Роль: архітектор».
 
-- [ ] **Step 5: Шість ADR за шаблоном skill adr**
+- [x] **Step 5: Шість ADR за шаблоном skill adr**
 
 Назви й суть з таблиці 5.2 спеки: 0001 Laravel володіє RAG; 0002 MariaDB Vector як сховище (у наслідках: індекс лише ORDER BY + LIMIT, тому підзапит кандидатів); 0003 локальні ембединги через fastembed (альтернативи Voyage, OpenAI; наслідок: драйвер для заміни); 0004 REST API + SPA з Sanctum cookie; 0005 SSE через StreamedResponse; 0006 grounding після відповіді.
 
-- [ ] **Step 6: docs/process/workflow.md і перший журнал сесії**
+- [x] **Step 6: docs/process/workflow.md і перший журнал сесії**
 
 `workflow.md`: чотири кроки циклу з розділу 16 спеки, список skills, правило запису в журнал: один рядок на виправлення у форматі `| задача | що зробив агент не так | яке правило додано |`.
 
 `docs/process/sessions/2026-10-06-plan-1.md`: заголовок, таблиця з трьома колонками, порожня, і рядок «Старт плану 1».
 
-- [ ] **Step 7: Коміт**
+- [x] **Step 7: Коміт**
 
 ```bash
 git add CLAUDE.md .claude docs
@@ -224,7 +224,7 @@ git commit -m "docs(process): brief, architecture, ADR 0001-0006, CLAUDE.md, age
 
 ---
 
-### Task 2: Скаффолд Laravel 13 + Pest 5 + конфіг rag
+### Task 2: Скаффолд Laravel 13 + Pest 5 + конфіг rag ✅ (1d92d97 + b004aae, рев'ю прийнято після 1 раунду)
 
 **Files:**
 - Create: Laravel-скелет у корені, `config/rag.php`, `.env.example` (доповнити), `.env.testing`, `tests/TestCase.php` (доповнити), `phpstan.neon`
@@ -233,7 +233,7 @@ git commit -m "docs(process): brief, architecture, ADR 0001-0006, CLAUDE.md, age
 **Interfaces:**
 - Produces: `config('rag.*')` ключі: `top_k`, `candidate_limit`, `max_distance`, `chunk.target_tokens`, `chunk.overlap_tokens`, `embedder.url`, `embedder.timeout_embed`, `embedder.timeout_extract`, `embedding_dim`, `models.answer`, `models.helper`, `prompts.answer`, `prompts.rewrite`, `prompts.grounding`, `anthropic.api_key`.
 
-- [ ] **Step 1: Створити скелет у порожній тимчасовій папці й перенести в корінь**
+- [x] **Step 1: Створити скелет у порожній тимчасовій папці й перенести в корінь**
 
 ```bash
 cd /Users/ok/PhpstormProjects/HurmaSystem
@@ -256,7 +256,7 @@ vendor/bin/pest --init
 
 Очікування: `php artisan --version` показує `Laravel Framework 13.x`, `vendor/bin/pest --version` показує 5.x.
 
-- [ ] **Step 2: config/rag.php**
+- [x] **Step 2: config/rag.php**
 
 ```php
 <?php
@@ -296,7 +296,7 @@ return [
 ];
 ```
 
-- [ ] **Step 3: .env.example і .env.testing**
+- [x] **Step 3: .env.example і .env.testing**
 
 Додати в `.env.example` (значення порожні або локальні):
 ```
@@ -340,7 +340,7 @@ ANTHROPIC_API_KEY=
 
 Скопіювати `.env.example` у `.env` локально й заповнити `DB_PASSWORD=mentor`, `DB_PORT=3307` (порт із Compose у Task 3).
 
-- [ ] **Step 4: tests/TestCase.php з прив'язкою фейків**
+- [x] **Step 4: tests/TestCase.php з прив'язкою фейків**
 
 Фейки з'являться в Task 6 і Task 11, тому тут лише каркас, який розширимо:
 
@@ -368,7 +368,7 @@ abstract class TestCase extends BaseTestCase
 
 У `tests/Pest.php` переконатися, що `pest()->extend(Tests\TestCase::class)->use(Illuminate\Foundation\Testing\RefreshDatabase::class)->in('Feature');`.
 
-- [ ] **Step 5: phpstan.neon**
+- [x] **Step 5: phpstan.neon**
 
 ```neon
 includes:
@@ -378,7 +378,7 @@ parameters:
     level: 6
 ```
 
-- [ ] **Step 6: Smoke-тест конфігу**
+- [x] **Step 6: Smoke-тест конфігу**
 
 `tests/Unit/ConfigTest.php`:
 ```php
@@ -396,7 +396,7 @@ it('exposes rag config defaults', function () {
 
 Run: `php artisan test --filter=ConfigTest`. Expected: PASS (Unit-тести не потребують бази).
 
-- [ ] **Step 7: Коміт**
+- [x] **Step 7: Коміт**
 
 ```bash
 git add -A
@@ -405,7 +405,7 @@ git commit -m "chore: scaffold Laravel 13 with Pest 5, Sanctum, Anthropic SDK, r
 
 ---
 
-### Task 3: Docker Compose (mariadb, redis, embedder) і Python-сайдкар
+### Task 3: Docker Compose (mariadb, redis, embedder) і Python-сайдкар ✅ (09105d8, рев'ю прийнято)
 
 **Files:**
 - Create: `docker-compose.yml`, `services/embedder/app.py`, `services/embedder/requirements.txt`, `services/embedder/Dockerfile`, `services/embedder/tests/test_api.py`, `services/embedder/pytest.ini`, `Makefile`
@@ -413,7 +413,7 @@ git commit -m "chore: scaffold Laravel 13 with Pest 5, Sanctum, Anthropic SDK, r
 **Interfaces:**
 - Produces: HTTP-контракт сайдкара з розділу 9 спеки: `POST /embed {texts, kind}` → `{vectors, model, dim}`; `POST /extract-text` multipart → `{pages:[{page,text}], meta:{pages_count,title}}`; `GET /health`. MariaDB на `127.0.0.1:3307`, Redis на `6379`, embedder на `8100`.
 
-- [ ] **Step 1: docker-compose.yml**
+- [x] **Step 1: docker-compose.yml**
 
 ```yaml
 services:
@@ -464,7 +464,7 @@ GRANT ALL PRIVILEGES ON mentor_test.* TO 'mentor'@'%';
 FLUSH PRIVILEGES;
 ```
 
-- [ ] **Step 2: Makefile**
+- [x] **Step 2: Makefile**
 
 ```makefile
 .PHONY: up down test seed demo eval
@@ -483,7 +483,7 @@ eval:
 	php artisan rag:eval
 ```
 
-- [ ] **Step 3: Тести сайдкара (падають, бо app.py ще немає)**
+- [x] **Step 3: Тести сайдкара (падають, бо app.py ще немає)**
 
 `services/embedder/requirements.txt`:
 ```
@@ -587,14 +587,14 @@ def test_extract_text_rejects_png():
     assert r.status_code == 422
 ```
 
-- [ ] **Step 4: Запустити тести, переконатися, що падають**
+- [x] **Step 4: Запустити тести, переконатися, що падають**
 
 ```bash
 cd services/embedder && python3 -m venv .venv && . .venv/bin/activate && pip install -r requirements.txt && pytest -q
 ```
 Expected: FAIL з `ModuleNotFoundError: No module named 'app'`.
 
-- [ ] **Step 5: services/embedder/app.py**
+- [x] **Step 5: services/embedder/app.py**
 
 ```python
 import io
@@ -687,11 +687,11 @@ def _extract_docx(data: bytes):
     return {"pages": [{"page": 1, "text": text}], "meta": {"pages_count": 1, "title": d.core_properties.title or None}}
 ```
 
-- [ ] **Step 6: Запустити тести**
+- [x] **Step 6: Запустити тести**
 
 Run: `cd services/embedder && pytest -q`. Expected: 7 passed (перший запуск завантажує модель з Hugging Face, це 1–2 хвилини).
 
-- [ ] **Step 7: Dockerfile з вшитою моделлю**
+- [x] **Step 7: Dockerfile з вшитою моделлю**
 
 ```dockerfile
 FROM python:3.12-slim
@@ -708,7 +708,7 @@ CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8100"]
 
 Run: `docker compose up -d --build && sleep 60 && curl -s localhost:8100/health`. Expected: `{"status":"ok","model":"intfloat/multilingual-e5-small","dim":384}`. Перевірка MariaDB: `docker compose exec mariadb mariadb -umentor -pmentor -e "SELECT VEC_DISTANCE_COSINE(VEC_FromText('[1,0]'), VEC_FromText('[0,1]'))"`. Expected: 1.
 
-- [ ] **Step 8: Коміт**
+- [x] **Step 8: Коміт**
 
 ```bash
 git add docker-compose.yml docker Makefile services/embedder
@@ -717,7 +717,7 @@ git commit -m "feat(embedder): fastapi sidecar with /embed and /extract-text, co
 
 ---
 
-### Task 4: Міграції, enums, моделі, фабрики
+### Task 4: Міграції, enums, моделі, фабрики ✅ (b47f7d0, рев'ю прийнято)
 
 **Files:**
 - Create: 9 міграцій у `database/migrations/`, `app/Knowledge/Enums/{DocumentStatus,AudienceType,IngestionStep,FailureCode}.php`, `app/Chat/Enums/MessageStatus.php`, `app/Knowledge/Models/{Department,Document,DocumentChunk,IngestionRun}.php`, `app/Chat/Models/{Conversation,Message,MessageCitation}.php`, `app/Insights/Models/KnowledgeGap.php`, фабрики `database/factories/{DepartmentFactory,DocumentFactory,ConversationFactory}.php`
@@ -727,7 +727,7 @@ git commit -m "feat(embedder): fastapi sidecar with /embed and /extract-text, co
 **Interfaces:**
 - Produces: моделі з розділу 6 спеки. Ключові сигнатури: `Document::visibilityWhere(Builder|QueryBuilder $q, User $user, string $table = 'documents'): void`, `Document::scopeVisibleTo(Builder $q, User $user)`, `Document::scopeReady(Builder $q)`, `User::isHrAdmin(): bool`. Enum `DocumentStatus` зі значеннями `uploaded, extracting, chunking, embedding, ready, failed`. Enum `FailureCode`: `no_text_layer, extractor_unavailable, embedder_unavailable, unsupported_format, unknown`.
 
-- [ ] **Step 1: Enums**
+- [x] **Step 1: Enums**
 
 `app/Knowledge/Enums/DocumentStatus.php`:
 ```php
@@ -757,7 +757,7 @@ enum DocumentStatus: string
 
 `AudienceType`: cases `All = 'all'`, `Department = 'department'`, `Role = 'role'`. `IngestionStep`: `Extract = 'extract'`, `Chunk = 'chunk'`, `Embed = 'embed'`. `FailureCode`: `NoTextLayer = 'no_text_layer'`, `ExtractorUnavailable = 'extractor_unavailable'`, `EmbedderUnavailable = 'embedder_unavailable'`, `UnsupportedFormat = 'unsupported_format'`, `Unknown = 'unknown'`. `App\Chat\Enums\MessageStatus`: `Streaming = 'streaming'`, `Completed = 'completed'`, `Failed = 'failed'`, `NoAnswer = 'no_answer'`.
 
-- [ ] **Step 2: Міграції**
+- [x] **Step 2: Міграції**
 
 Доповнити міграцію users (`0001_01_01_000000_create_users_table.php`) полями після `password`:
 ```php
@@ -830,7 +830,7 @@ public function down(): void
 
 `2026_10_06_000070_create_knowledge_gaps_table.php`: `id, question_normalized string unique, question_example text, occurrences unsignedInteger default 1, status string(15) default 'open', resolved_document_id FK nullable nullOnDelete, last_asked_at timestamp, timestamps`.
 
-- [ ] **Step 3: Моделі**
+- [x] **Step 3: Моделі**
 
 `app/Knowledge/Models/Document.php`:
 ```php
@@ -955,7 +955,7 @@ public function department(): BelongsTo
 ```
 Прибрати `HasApiTokens`, якщо `install:api` додав, не потрібен для cookie-автентифікації (залишити не шкодить, але тоді не забути про міграцію personal_access_tokens, її лишаємо як є).
 
-- [ ] **Step 4: Фабрики**
+- [x] **Step 4: Фабрики**
 
 `DepartmentFactory`: `name => fake()->unique()->randomElement(['Engineering', 'Marketing', 'Sales', 'Support', 'HR'])`.
 
@@ -1009,7 +1009,7 @@ public function status(DocumentStatus $status): static
 
 `ConversationFactory`: `user_id => User::factory()`, `last_message_at => now()`.
 
-- [ ] **Step 5: Тест схеми й видимості (падає до реалізації)**
+- [x] **Step 5: Тест схеми й видимості (падає до реалізації)**
 
 `tests/Feature/Knowledge/SchemaTest.php`:
 ```php
@@ -1062,14 +1062,14 @@ it('does not match department rule for a user without department', function () {
 });
 ```
 
-- [ ] **Step 6: Запустити міграції й тести**
+- [x] **Step 6: Запустити міграції й тести**
 
 ```bash
 docker compose up -d mariadb && php artisan migrate --env=testing && php artisan test --filter=SchemaTest
 ```
 Expected: 3 passed. Якщо `VECTOR` дає синтаксичну помилку, перевірити версію: `docker compose exec mariadb mariadb -V` має показати 11.8.
 
-- [ ] **Step 7: Коміт**
+- [x] **Step 7: Коміт**
 
 ```bash
 git add -A
@@ -1078,7 +1078,7 @@ git commit -m "feat(knowledge): schema, enums, models with audience visibility (
 
 ---
 
-### Task 5: Автентифікація Sanctum SPA (login, logout, me)
+### Task 5: Автентифікація Sanctum SPA (login, logout, me) ✅ (d3900a9 + 9c00df3, рев'ю прийнято після 1 раунду)
 
 **Files:**
 - Create: `app/Http/Controllers/AuthController.php`, `app/Http/Resources/UserResource.php`
@@ -1088,7 +1088,7 @@ git commit -m "feat(knowledge): schema, enums, models with audience visibility (
 **Interfaces:**
 - Produces: маршрути `POST /api/v1/auth/login`, `POST /api/v1/auth/logout`, `GET /api/v1/me`. Група маршрутів `Route::prefix('v1')->middleware('auth:sanctum')` у `routes/api.php`, у яку наступні задачі додають ресурси. Формат помилки `{"error": {"code", "message", "details"}}` через `bootstrap/app.php` `withExceptions`.
 
-- [ ] **Step 1: Тест**
+- [x] **Step 1: Тест**
 
 ```php
 <?php
@@ -1132,7 +1132,7 @@ it('logs out', function () {
 
 Run: `php artisan test --filter=AuthTest`. Expected: FAIL (404 на маршрути).
 
-- [ ] **Step 2: Контролер і ресурс**
+- [x] **Step 2: Контролер і ресурс**
 
 `app/Http/Controllers/AuthController.php`:
 ```php
@@ -1183,7 +1183,7 @@ class AuthController extends Controller
 
 `UserResource::toArray`: `id, name, email, role, department_id, job_role`.
 
-- [ ] **Step 3: Маршрути, middleware, формат помилок**
+- [x] **Step 3: Маршрути, middleware, формат помилок**
 
 `routes/api.php`:
 ```php
@@ -1242,11 +1242,11 @@ Route::prefix('v1')->group(function () {
 
 `config/cors.php`: `paths => ['api/*', 'sanctum/csrf-cookie']`, `allowed_origins => [env('FRONTEND_URL', 'http://localhost:5173')]`, `supports_credentials => true`.
 
-- [ ] **Step 4: Запустити тести**
+- [x] **Step 4: Запустити тести**
 
 Run: `php artisan test --filter=AuthTest`. Expected: 4 passed.
 
-- [ ] **Step 5: Коміт**
+- [x] **Step 5: Коміт**
 
 ```bash
 git add -A
@@ -1255,7 +1255,7 @@ git commit -m "feat(auth): sanctum spa login/logout/me with json error envelope"
 
 ---
 
-### Task 6: Контракти EmbeddingProvider і TextExtractor, HTTP-реалізації, фейки
+### Task 6: Контракти EmbeddingProvider і TextExtractor, HTTP-реалізації, фейки ✅ (95413d5, рев'ю прийнято)
 
 **Files:**
 - Create: `app/Knowledge/Contracts/EmbeddingProvider.php`, `app/Knowledge/Contracts/TextExtractor.php`, `app/Knowledge/Embedding/HttpEmbeddingProvider.php`, `app/Knowledge/Embedding/FakeEmbeddingProvider.php`, `app/Knowledge/Embedding/EmbeddingException.php`, `app/Knowledge/Extraction/ExtractedPage.php`, `app/Knowledge/Extraction/HttpTextExtractor.php`, `app/Knowledge/Extraction/LocalTextExtractor.php`, `app/Knowledge/Extraction/CompositeTextExtractor.php`, `app/Knowledge/Extraction/FakeTextExtractor.php`, `app/Knowledge/Extraction/ExtractionException.php`, `app/Providers/RagServiceProvider.php`
@@ -1280,7 +1280,7 @@ final readonly class ExtractedPage { public function __construct(public int $pag
 ```
 `EmbeddingException` з кодами-константами `UNAVAILABLE`, `BAD_DIMENSION`. `ExtractionException` з `UNAVAILABLE`, `UNSUPPORTED`. `FakeEmbeddingProvider::vectorFor(string $text): array` публічний, щоб тести пошуку могли передбачити вектор.
 
-- [ ] **Step 1: Unit-тест фейкового провайдера**
+- [x] **Step 1: Unit-тест фейкового провайдера**
 
 `tests/Unit/Knowledge/FakeEmbeddingProviderTest.php`:
 ```php
@@ -1310,7 +1310,7 @@ it('makes similar texts closer than unrelated ones', function () {
 });
 ```
 
-- [ ] **Step 2: Реалізація фейка**
+- [x] **Step 2: Реалізація фейка**
 
 Фейк будує вектор із хешів слів (bag of words у 384 кошики), тому схожі тексти близькі, а різні далекі. Це дає реалістичну поведінку пошуку в тестах без моделі.
 
@@ -1359,7 +1359,7 @@ final class FakeEmbeddingProvider implements EmbeddingProvider
 
 Run: `php artisan test --filter=FakeEmbeddingProviderTest`. Expected: 2 passed.
 
-- [ ] **Step 3: Тест HTTP-провайдера з Http::fake (включно з перевіркою розміру вектора, Review Focus 5)**
+- [x] **Step 3: Тест HTTP-провайдера з Http::fake (включно з перевіркою розміру вектора, Review Focus 5)**
 
 `tests/Feature/Knowledge/HttpEmbeddingProviderTest.php`:
 ```php
@@ -1403,7 +1403,7 @@ it('throws UNAVAILABLE on connection error or 5xx', function () {
 });
 ```
 
-- [ ] **Step 4: Реалізація HTTP-провайдера і винятку**
+- [x] **Step 4: Реалізація HTTP-провайдера і винятку**
 
 ```php
 <?php
@@ -1481,7 +1481,7 @@ final class HttpEmbeddingProvider implements EmbeddingProvider
 }
 ```
 
-- [ ] **Step 5: Екстрактори і тест**
+- [x] **Step 5: Екстрактори і тест**
 
 `ExtractedPage` як у Interfaces. `ExtractionException` за тим самим шаблоном, що `EmbeddingException`, коди `UNAVAILABLE = 'extractor_unavailable'`, `UNSUPPORTED = 'unsupported_format'`.
 
@@ -1529,7 +1529,7 @@ it('throws UNSUPPORTED for unknown mime in composite', function () {
 });
 ```
 
-- [ ] **Step 6: RagServiceProvider і прив'язка фейків у тестах**
+- [x] **Step 6: RagServiceProvider і прив'язка фейків у тестах**
 
 `app/Providers/RagServiceProvider.php`:
 ```php
@@ -1574,11 +1574,11 @@ $this->app->bind(TextExtractor::class, FakeTextExtractor::class);
 ```
 Тести, яким потрібна HTTP-реалізація, резолвлять конкретний клас (`app(HttpEmbeddingProvider::class)`), як у тестах вище.
 
-- [ ] **Step 7: Запустити всі тести задачі**
+- [x] **Step 7: Запустити всі тести задачі**
 
 Run: `php artisan test --filter='FakeEmbeddingProviderTest|HttpEmbeddingProviderTest|TextExtractorTest'`. Expected: 9 passed.
 
-- [ ] **Step 8: Коміт**
+- [x] **Step 8: Коміт**
 
 ```bash
 git add -A
@@ -1587,7 +1587,7 @@ git commit -m "feat(knowledge): embedding and extraction contracts with http and
 
 ---
 
-### Task 7: Chunker
+### Task 7: Chunker ✅ (26b4a1a + ccfbca5, рев'ю прийнято після 1 раунду)
 
 **Files:**
 - Create: `app/Knowledge/Chunking/Chunk.php`, `app/Knowledge/Chunking/Chunker.php`
@@ -1605,7 +1605,7 @@ final class Chunker {
 }
 ```
 
-- [ ] **Step 1: Тести**
+- [x] **Step 1: Тести**
 
 ```php
 <?php
@@ -1695,7 +1695,7 @@ it('detects numbered and uppercase headings in plain text from pdf', function ()
 
 Run: `php artisan test --filter=ChunkerTest`. Expected: FAIL (клас відсутній).
 
-- [ ] **Step 2: Реалізація**
+- [x] **Step 2: Реалізація**
 
 Алгоритм: нормалізувати текст кожної сторінки (BOM, CRLF), розбити на блоки по порожніх рядках, кожен блок класифікувати як заголовок або абзац, абзаци понад `maxTokens` різати по реченнях, далі жадібно збирати блоки у чанк до `targetTokens`; новий заголовок завжди закриває поточний чанк; при відкритті наступного чанка додавати хвіст попереднього на `overlapTokens * 4` символів.
 
@@ -1844,11 +1844,11 @@ final class Chunker
 }
 ```
 
-- [ ] **Step 3: Запустити тести**
+- [x] **Step 3: Запустити тести**
 
 Run: `php artisan test --filter=ChunkerTest`. Expected: 8 passed. Якщо тест перекриття падає, перевірити, що `prevTail` скидається лише на заголовку.
 
-- [ ] **Step 4: Коміт**
+- [x] **Step 4: Коміт**
 
 ```bash
 git add app/Knowledge/Chunking tests/Unit/Knowledge/ChunkerTest.php
@@ -1857,7 +1857,7 @@ git commit -m "feat(knowledge): deterministic chunker with headings, overlap and
 
 ---
 
-### Task 8: Ланцюжок інжесту: ChunkWriter, три job-и, DocumentIngestionService
+### Task 8: Ланцюжок інжесту: ChunkWriter, три job-и, DocumentIngestionService ✅ (5cb8318 + 34e44ca, рев'ю прийнято після 1 раунду)
 
 **Files:**
 - Create: `app/Knowledge/Ingestion/ChunkWriter.php`, `app/Knowledge/Ingestion/DocumentIngestionService.php`, `app/Knowledge/Ingestion/IngestionArtifacts.php`, `app/Knowledge/Jobs/ExtractDocumentText.php`, `app/Knowledge/Jobs/ChunkDocument.php`, `app/Knowledge/Jobs/EmbedDocumentChunks.php`
@@ -1881,7 +1881,7 @@ final class ChunkWriter {
 ```
 Кожен job: `public int $tries = 3; public array $backoff = [10, 30, 90]; public function __construct(public int $documentId) { $this->onQueue('ingestion'); }`.
 
-- [ ] **Step 1: Тест усього ланцюжка (sync queue у .env.testing)**
+- [x] **Step 1: Тест усього ланцюжка (sync queue у .env.testing)**
 
 `tests/Feature/Knowledge/IngestionChainTest.php`:
 ```php
@@ -1934,7 +1934,7 @@ it('uses the extractor for pdf pages and keeps page numbers on chunks', function
 });
 ```
 
-- [ ] **Step 2: Тести job-ів окремо (failed-гілки, AC-3, Review Focus 1)**
+- [x] **Step 2: Тести job-ів окремо (failed-гілки, AC-3, Review Focus 1)**
 
 `tests/Feature/Knowledge/Jobs/ExtractDocumentTextTest.php`:
 ```php
@@ -2048,7 +2048,7 @@ it('marks embedder_unavailable on provider failure', function () {
 
 Run: `php artisan test --filter='IngestionChainTest|ExtractDocumentTextTest|EmbedDocumentChunksTest'`. Expected: FAIL (класи відсутні).
 
-- [ ] **Step 3: IngestionArtifacts, ChunkWriter, DocumentIngestionService**
+- [x] **Step 3: IngestionArtifacts, ChunkWriter, DocumentIngestionService**
 
 ```php
 <?php
@@ -2127,7 +2127,7 @@ final class DocumentIngestionService
 }
 ```
 
-- [ ] **Step 4: Спільна база job-ів і три job-и**
+- [x] **Step 4: Спільна база job-ів і три job-и**
 
 Щоб не дублювати, абстрактний `app/Knowledge/Jobs/IngestionJob.php`:
 ```php
@@ -2313,11 +2313,11 @@ final class EmbedDocumentChunks extends IngestionJob
 }
 ```
 
-- [ ] **Step 5: Запустити тести**
+- [x] **Step 5: Запустити тести**
 
 Run: `php artisan test --filter='IngestionChainTest|ExtractDocumentTextTest|EmbedDocumentChunksTest'`. Expected: 7 passed. Якщо `Bus::chain` у sync-черзі не виконує наступні job-и, перевірити, що `QUEUE_CONNECTION=sync` у `.env.testing`.
 
-- [ ] **Step 6: Коміт**
+- [x] **Step 6: Коміт**
 
 ```bash
 git add -A
@@ -2326,7 +2326,7 @@ git commit -m "feat(knowledge): ingestion chain extract->chunk->embed with runs 
 
 ---
 
-### Task 9: API документів: завантаження, список, перегляд, Policy
+### Task 9: API документів: завантаження, список, перегляд, Policy ✅ (53ca19f, рев'ю прийнято)
 
 **Files:**
 - Create: `app/Knowledge/Http/DocumentController.php`, `app/Knowledge/Http/StoreDocumentRequest.php`, `app/Knowledge/Http/DocumentResource.php`, `app/Knowledge/Policies/DocumentPolicy.php`, `app/Knowledge/Ingestion/DocumentUploader.php`
@@ -2337,7 +2337,7 @@ git commit -m "feat(knowledge): ingestion chain extract->chunk->embed with runs 
 - Consumes: `DocumentIngestionService::dispatchChain`.
 - Produces: `DocumentUploader::upload(UploadedFile $file, string $title, AudienceType $type, ?string $value, User $by): array{document: Document, created: bool}`. Маршрути `GET /documents`, `POST /documents`, `GET /documents/{document}`. `POST /documents/{id}/retry`, `DELETE`, `/chunks` лишаються для плану 2.
 
-- [ ] **Step 1: Тести**
+- [x] **Step 1: Тести**
 
 ```php
 <?php
@@ -2417,7 +2417,7 @@ it('lists documents with status filter and shows one with ingestion runs', funct
 
 Run: `php artisan test --filter=DocumentApiTest`. Expected: FAIL.
 
-- [ ] **Step 2: Form Request, Policy, Uploader**
+- [x] **Step 2: Form Request, Policy, Uploader**
 
 `StoreDocumentRequest::rules()`:
 ```php
@@ -2480,7 +2480,7 @@ final class DocumentUploader
 }
 ```
 
-- [ ] **Step 3: Контролер, ресурс, маршрути**
+- [x] **Step 3: Контролер, ресурс, маршрути**
 
 `DocumentController`:
 ```php
@@ -2522,11 +2522,11 @@ Route::post('documents', [DocumentController::class, 'store']);
 Route::get('documents/{document}', [DocumentController::class, 'show']);
 ```
 
-- [ ] **Step 4: Запустити тести**
+- [x] **Step 4: Запустити тести**
 
 Run: `php artisan test --filter=DocumentApiTest`. Expected: 6 passed. Якщо тест на 403 для `POST` з порожнім тілом повертає 422, перевірити, що `authorize()` у Form Request спрацьовує до валідації (у Laravel так і є).
 
-- [ ] **Step 5: Коміт**
+- [x] **Step 5: Коміт**
 
 ```bash
 git add -A
@@ -2535,7 +2535,7 @@ git commit -m "feat(knowledge): document upload/list/show api with policy and sh
 
 ---
 
-### Task 10: ChunkSearchRepository і кеш ембедингу запиту
+### Task 10: ChunkSearchRepository і кеш ембедингу запиту ✅ (ec2499c, рев'ю прийнято)
 
 **Files:**
 - Create: `app/Retrieval/SearchHit.php`, `app/Retrieval/ChunkSearchRepository.php`, `app/Retrieval/QueryEmbeddingCache.php`
@@ -2559,7 +2559,7 @@ final class QueryEmbeddingCache {
 }
 ```
 
-- [ ] **Step 1: Тести репозиторію (негативний тест аудиторії, AC-5 на рівні SQL)**
+- [x] **Step 1: Тести репозиторію (негативний тест аудиторії, AC-5 на рівні SQL)**
 
 ```php
 <?php
@@ -2636,7 +2636,7 @@ it('returns an empty list when there are no chunks', function () {
 });
 ```
 
-- [ ] **Step 2: Реалізація репозиторію**
+- [x] **Step 2: Реалізація репозиторію**
 
 ```php
 <?php
@@ -2683,7 +2683,7 @@ final class ChunkSearchRepository
 
 Run: `php artisan test --filter=ChunkSearchRepositoryTest`. Expected: 4 passed.
 
-- [ ] **Step 3: Кеш ембедингу запиту**
+- [x] **Step 3: Кеш ембедингу запиту**
 
 Тест `tests/Feature/Retrieval/QueryEmbeddingCacheTest.php`:
 ```php
@@ -2735,7 +2735,7 @@ final class QueryEmbeddingCache
 
 Run: `php artisan test --filter=QueryEmbeddingCacheTest`. Expected: 1 passed.
 
-- [ ] **Step 4: Коміт**
+- [x] **Step 4: Коміт**
 
 ```bash
 git add -A
@@ -2744,7 +2744,7 @@ git commit -m "feat(retrieval): indexed candidate search with audience filter an
 
 ---
 
-### Task 11: LlmClient: контракт, промпти v1, Anthropic-реалізація, фейк, snapshot-тест
+### Task 11: LlmClient: контракт, промпти v1, Anthropic-реалізація, фейк, snapshot-тест ✅ (7b09985, рев'ю прийнято)
 
 **Files:**
 - Create: `app/Chat/Contracts/LlmClient.php`, `app/Chat/Llm/AnswerResult.php`, `app/Chat/Llm/GroundingResult.php`, `app/Chat/Llm/LlmException.php`, `app/Chat/Llm/PromptLoader.php`, `app/Chat/Llm/PromptBuilder.php`, `app/Chat/Llm/AnthropicLlmClient.php`, `app/Chat/Llm/FakeLlmClient.php`, `resources/prompts/answer.v1.md`, `resources/prompts/rewrite.v1.md`, `resources/prompts/grounding.v1.md`
@@ -2779,7 +2779,7 @@ final class FakeLlmClient implements LlmClient {
 }
 ```
 
-- [ ] **Step 1: Промпти v1**
+- [x] **Step 1: Промпти v1**
 
 `resources/prompts/answer.v1.md`:
 ```markdown
@@ -2803,7 +2803,7 @@ final class FakeLlmClient implements LlmClient {
 Перевір, чи кожне твердження у відповіді підтверджується наданими фрагментами. Відповідь вважається grounded, якщо вона не містить фактів, яких немає у фрагментах, або якщо вона чесно каже, що інформації немає. Поверни grounded true/false і коротку причину одним реченням.
 ```
 
-- [ ] **Step 2: Snapshot-тест збірки промпту і тест фейка**
+- [x] **Step 2: Snapshot-тест збірки промпту і тест фейка**
 
 `tests/Unit/Chat/PromptSnapshotTest.php`:
 ```php
@@ -2865,7 +2865,7 @@ it('throws the configured exception', function () {
 
 Run: `php artisan test --filter='PromptSnapshotTest|FakeLlmClientTest'`. Expected: FAIL.
 
-- [ ] **Step 3: PromptLoader, PromptBuilder**
+- [x] **Step 3: PromptLoader, PromptBuilder**
 
 ```php
 final class PromptLoader
@@ -2922,7 +2922,7 @@ final class PromptBuilder
 }
 ```
 
-- [ ] **Step 4: AnswerResult, GroundingResult, LlmException, FakeLlmClient**
+- [x] **Step 4: AnswerResult, GroundingResult, LlmException, FakeLlmClient**
 
 `GroundingResult`:
 ```php
@@ -3004,7 +3004,7 @@ final class FakeLlmClient implements LlmClient
 }
 ```
 
-- [ ] **Step 5: AnthropicLlmClient**
+- [x] **Step 5: AnthropicLlmClient**
 
 ```php
 <?php
@@ -3110,7 +3110,7 @@ final class AnthropicLlmClient implements LlmClient
 ```
 Якщо `RawMessageDeltaEvent::$delta->stopReason` або `Anthropic\Core\Exceptions\APIConnectionException` не існують під такими іменами у встановленій версії SDK, подивитися `vendor/anthropic-ai/sdk/src/Messages/RawMessageDeltaEvent/Delta.php` і `vendor/anthropic-ai/sdk/src/Core/Exceptions/` і виправити імпорти, не вигадуючи назв.
 
-- [ ] **Step 6: Прив'язки**
+- [x] **Step 6: Прив'язки**
 
 `RagServiceProvider::register`:
 ```php
@@ -3126,11 +3126,11 @@ $this->app->singleton(FakeLlmClient::class);
 $this->app->bind(LlmClient::class, FakeLlmClient::class);
 ```
 
-- [ ] **Step 7: Запустити тести, зафіксувати snapshots**
+- [x] **Step 7: Запустити тести, зафіксувати snapshots**
 
 Run: `php artisan test --filter='PromptSnapshotTest|FakeLlmClientTest'`. Expected: перший запуск створює snapshots у `tests/.pest/snapshots/`, далі PASS. Відкрити snapshot-файли й прочитати, що промпт зібрався як очікувалось. Закомітити snapshots.
 
-- [ ] **Step 8: Коміт**
+- [x] **Step 8: Коміт**
 
 ```bash
 git add -A
@@ -3139,7 +3139,7 @@ git commit -m "feat(chat): llm client contract, anthropic streaming client, fake
 
 ---
 
-### Task 12: CitationParser
+### Task 12: CitationParser ✅ (58eaa7f, рев'ю прийнято)
 
 **Files:**
 - Create: `app/Chat/CitationParser.php`, `app/Chat/ParsedCitation.php`
@@ -3156,7 +3156,7 @@ final class CitationParser {
 }
 ```
 
-- [ ] **Step 1: Тести (включно з маркером поза діапазоном, Review Focus 3)**
+- [x] **Step 1: Тести (включно з маркером поза діапазоном, Review Focus 3)**
 
 ```php
 <?php
@@ -3193,7 +3193,7 @@ it('returns nothing for an answer without markers', function () {
 });
 ```
 
-- [ ] **Step 2: Реалізація**
+- [x] **Step 2: Реалізація**
 
 ```php
 final class CitationParser
@@ -3226,7 +3226,7 @@ final class CitationParser
 
 Run: `php artisan test --filter=CitationParserTest`. Expected: 3 passed.
 
-- [ ] **Step 3: Коміт**
+- [x] **Step 3: Коміт**
 
 ```bash
 git add -A
@@ -3235,7 +3235,7 @@ git commit -m "feat(chat): citation parser with out-of-range marker handling (AC
 
 ---
 
-### Task 13: AnswerService, SSE, прогалини, ендпоінти розмов і повідомлень
+### Task 13: AnswerService, SSE, прогалини, ендпоінти розмов і повідомлень ✅ (8a989b8 + c51bd7e, рев'ю прийнято після 1 раунду)
 
 **Files:**
 - Create: `app/Insights/QuestionNormalizer.php`, `app/Insights/KnowledgeGapRecorder.php`, `app/Chat/SseWriter.php`, `app/Chat/AnswerService.php`, `app/Chat/Http/ConversationController.php`, `app/Chat/Http/MessageController.php`, `app/Chat/Http/StoreMessageRequest.php`, `app/Chat/Http/ConversationResource.php`, `app/Chat/Http/MessageResource.php`, `app/Chat/Policies/ConversationPolicy.php`
@@ -3262,7 +3262,7 @@ final class AnswerService {
 ```
 Маршрути: `GET/POST /conversations`, `GET /conversations/{conversation}/messages`, `POST /conversations/{conversation}/messages` (SSE, `throttle:chat` = 20/хв), `GET /chunks/{id}`.
 
-- [ ] **Step 1: Unit-тест нормалізатора**
+- [x] **Step 1: Unit-тест нормалізатора**
 
 ```php
 <?php
@@ -3278,7 +3278,7 @@ it('normalizes case, whitespace and trailing punctuation', function () {
 ```
 Реалізація: `mb_strtolower(trim)`, `preg_replace('/\s+/u', ' ')`, `preg_replace('/[\s?!.,;:…]+$/u', '')`, `mb_substr(..., 0, 255)`.
 
-- [ ] **Step 2: Feature-тести потоку відповіді (AC-6, AC-7, AC-8, Review Focus 3, 4)**
+- [x] **Step 2: Feature-тести потоку відповіді (AC-6, AC-7, AC-8, Review Focus 3, 4)**
 
 `tests/Feature/Chat/AnswerFlowTest.php`:
 ```php
@@ -3474,7 +3474,7 @@ it('hides other users conversations', function () {
 
 Run: `php artisan test --filter='QuestionNormalizerTest|AnswerFlowTest|ConversationApiTest'`. Expected: FAIL.
 
-- [ ] **Step 3: KnowledgeGapRecorder, SseWriter**
+- [x] **Step 3: KnowledgeGapRecorder, SseWriter**
 
 ```php
 final class KnowledgeGapRecorder
@@ -3535,7 +3535,7 @@ final class SseWriter
 }
 ```
 
-- [ ] **Step 4: AnswerService**
+- [x] **Step 4: AnswerService**
 
 ```php
 <?php
@@ -3666,7 +3666,7 @@ final class AnswerService
 ```
 Поведінка «обрив клієнтом» зі спеки (розділ 7.2) реалізується в контролері: якщо `connection_aborted()` стає істинним під час стріму, SseWriter лише перестає писати, а сервіс дописує повідомлення як є. Для плану 1 це покривається тим, що `fail` не викликається, а `done` просто не доходить. Повну обробку з позначкою `client_disconnected` робить план 2 разом з історією розмов в UI.
 
-- [ ] **Step 5: Контролери, Policy, Form Request, ресурси, маршрути**
+- [x] **Step 5: Контролери, Policy, Form Request, ресурси, маршрути**
 
 `ConversationPolicy::view/update(User $user, Conversation $c)`: `$c->user_id === $user->id`. Зареєструвати в `AppServiceProvider`.
 
@@ -3722,11 +3722,11 @@ Route::get('chunks/{id}', [ChunkController::class, 'show']);
 
 `App\Knowledge\Http\ChunkController::show(Request $request, int $id)`: `DB::table('document_chunks as c')->join('documents as d', ...)->whereNull('d.deleted_at')->where('c.id', $id)` + `Document::visibilityWhere($query, $request->user(), 'd')` + `select(c.id, c.document_id, d.title, c.page, c.heading, c.content)`; 404, якщо немає. Так, це третій raw SELECT до чанків; щоб не порушити правило «raw SELECT лише в репозиторії», додати в `ChunkSearchRepository` метод `findVisible(int $chunkId, User $user): ?SearchHit` (distance = 0.0) і викликати його з контролера. Тест на `GET /chunks/{id}` для чужої аудиторії додає план 2 (AC-5 UI), але метод писати тут.
 
-- [ ] **Step 6: Запустити тести**
+- [x] **Step 6: Запустити тести**
 
 Run: `php artisan test --filter='QuestionNormalizerTest|AnswerFlowTest|ConversationApiTest'`. Expected: 13 passed. Потім повний прогін `php artisan test`: усе зелене. `vendor/bin/pint`, `vendor/bin/phpstan analyse`.
 
-- [ ] **Step 7: Коміт**
+- [x] **Step 7: Коміт**
 
 ```bash
 git add -A
@@ -3735,7 +3735,7 @@ git commit -m "feat(chat): answer service with sse streaming, citations, groundi
 
 ---
 
-### Task 14: Vue 3 SPA: вхід і чат зі стрімінгом та цитатами
+### Task 14: Vue 3 SPA: вхід і чат зі стрімінгом та цитатами ✅ (e4149e7 + 12758f5, рев'ю прийнято після 1 раунду)
 
 **Files:**
 - Create: `resources/js/app.js`, `resources/js/router.js`, `resources/js/api.js`, `resources/js/sse.js`, `resources/js/stores/auth.js`, `resources/js/stores/chat.js`, `resources/js/views/LoginView.vue`, `resources/js/views/ChatView.vue`, `resources/js/components/MessageBubble.vue`, `resources/js/components/CitationPanel.vue`, `resources/js/App.vue`, `resources/views/app.blade.php`, `vitest.config.js`
@@ -3746,7 +3746,7 @@ git commit -m "feat(chat): answer service with sse streaming, citations, groundi
 - Consumes: API розділу 8 (login, me, conversations, messages SSE, chunks).
 - Produces: `parseSseChunk(buffer: string): {events: Array<{event: string, data: any}>, rest: string}`; `streamMessage(conversationId, content, handlers: {onEvent})`; Pinia store `useChatStore` з `conversations, current, messages, streaming, error, loadConversations(), openConversation(id), newConversation(), send(content)`.
 
-- [ ] **Step 1: Залежності й конфіг**
+- [x] **Step 1: Залежності й конфіг**
 
 ```bash
 npm install vue@^3.5 vue-router@^4 pinia@^3 vuetify@^3.7 @mdi/font axios
@@ -3769,7 +3769,7 @@ export default defineConfig({
 `routes/web.php`: `Route::view('/{any?}', 'app')->where('any', '^(?!api|sanctum).*$');`
 `resources/views/app.blade.php`: мінімальний HTML з `<div id="app"></div>` і `@vite('resources/js/app.js')`, `<meta name="csrf-token" content="{{ csrf_token() }}">`.
 
-- [ ] **Step 2: Тест парсера SSE (падає)**
+- [x] **Step 2: Тест парсера SSE (падає)**
 
 `resources/js/sse.test.js`:
 ```js
@@ -3790,7 +3790,7 @@ describe('parseSseChunk', () => {
 });
 ```
 
-- [ ] **Step 3: api.js і sse.js**
+- [x] **Step 3: api.js і sse.js**
 
 `resources/js/api.js`:
 ```js
@@ -3854,7 +3854,7 @@ export async function streamMessage(conversationId, content, { onEvent }) {
 
 Run: `npm run test`. Expected: sse.test.js PASS.
 
-- [ ] **Step 4: Тест стора чату (падає)**
+- [x] **Step 4: Тест стора чату (падає)**
 
 `resources/js/stores/chat.test.js`:
 ```js
@@ -3907,7 +3907,7 @@ describe('chat store send', () => {
 });
 ```
 
-- [ ] **Step 5: Стори**
+- [x] **Step 5: Стори**
 
 `resources/js/stores/auth.js`:
 ```js
@@ -3996,7 +3996,7 @@ export const useChatStore = defineStore('chat', () => {
 
 Run: `npm run test`. Expected: 4 tests PASS.
 
-- [ ] **Step 6: app.js, router, App.vue, views, components**
+- [x] **Step 6: app.js, router, App.vue, views, components**
 
 `resources/js/app.js`:
 ```js
@@ -4023,14 +4023,14 @@ createApp(App).use(createPinia()).use(router).use(createVuetify()).mount('#app')
 
 `CitationPanel.vue`: props `citation`; показує `document_title`, `page`, `quote`. Кнопка «Відкрити фрагмент» вантажить `GET /chunks/{chunk_id}` і показує повний `content`.
 
-- [ ] **Step 7: Ручна перевірка в браузері**
+- [x] **Step 7: Ручна перевірка в браузері**
 
 ```bash
 docker compose up -d && php artisan serve & php artisan queue:work --queue=ingestion & npm run dev
 ```
 Увійти як HR (сідер з Task 15), завантажити документ через `curl` або Task 15 `make demo`, потім як співробітник поставити питання й побачити стрім і цитату. `npm run build` без помилок.
 
-- [ ] **Step 8: Коміт**
+- [x] **Step 8: Коміт**
 
 ```bash
 git add -A
@@ -4039,7 +4039,7 @@ git commit -m "feat(web): vue spa with login, streaming chat and citation panel 
 
 ---
 
-### Task 15: Демо-дані Vesna Tech, журнал сесії, тег віхи
+### Task 15: Демо-дані Vesna Tech, журнал сесії, тег віхи ✅ (5b8fd75, тег v0.1-vertical-slice, рев'ю прийнято)
 
 **Files:**
 - Create: `database/seeders/DemoSeeder.php`, `database/seeders/demo/01-vacation-policy.md`, `database/seeders/demo/02-onboarding-guide.md`, `database/seeders/demo/03-security-policy.md`, `database/seeders/demo/04-code-review.md`, `database/seeders/demo/05-benefits.md`, `README.md`
@@ -4049,7 +4049,7 @@ git commit -m "feat(web): vue spa with login, streaming chat and citation panel 
 **Interfaces:**
 - Produces: користувачі демо `hr@vesna.test / password` (hr_admin), `dev@vesna.test / password` (Engineering, developer), `pm@vesna.test / password` (Marketing, manager). П'ять Markdown-документів вигаданої компанії, аудиторії: 01, 02, 05 для всіх; 03 для всіх; 04 для відділу Engineering.
 
-- [ ] **Step 1: Тест сідера**
+- [x] **Step 1: Тест сідера**
 
 ```php
 <?php
@@ -4071,7 +4071,7 @@ it('seeds users and ingests five demo documents to ready', function () {
 });
 ```
 
-- [ ] **Step 2: Документи демо**
+- [x] **Step 2: Документи демо**
 
 Кожен файл 600–1200 слів українською про вигадану компанію Vesna Tech, з заголовками `#`/`##`, без реальних імен і контактів. Теми й ключові факти (вони ж підуть в eval у плані 3):
 - `01-vacation-policy.md`: 24 календарні дні, заявка за 14 днів, перенесення до 10 днів, перші 6 місяців пропорційно.
@@ -4080,7 +4080,7 @@ it('seeds users and ingests five demo documents to ready', function () {
 - `04-code-review.md`: PR до 400 рядків, два апрува, CI зелений, рев'ю протягом 24 годин, аудиторія Engineering.
 - `05-benefits.md`: медстрахування після 3 місяців, бюджет на навчання 500 на рік, спортивна компенсація.
 
-- [ ] **Step 3: DemoSeeder**
+- [x] **Step 3: DemoSeeder**
 
 ```php
 final class DemoSeeder extends Seeder
@@ -4111,11 +4111,11 @@ final class DemoSeeder extends Seeder
 ```
 У тесті черга `sync`, тому документи стають `ready` одразу. У dev з Redis-чергою запустити `php artisan queue:work --queue=ingestion`.
 
-- [ ] **Step 4: README.md**
+- [x] **Step 4: README.md**
 
 Розділи: що це і для кого (3 речення, лінк на спеку і кейс), швидкий старт (`make up`, `cp .env.example .env`, заповнити `ANTHROPIC_API_KEY`, `php artisan migrate --seed`, `make demo`, `php artisan serve`, `php artisan queue:work --queue=ingestion`, `npm run dev`), демо-логіни, як запускати тести, структура репо, посилання на `docs/`.
 
-- [ ] **Step 5: Журнал сесії та тег**
+- [x] **Step 5: Журнал сесії та тег**
 
 Доповнити `docs/process/sessions/2026-10-06-plan-1.md` рядками для кожного виправлення, яке відбулось під час виконання задач 2–14 (що агент зробив не так, яке правило додано). Якщо виправлень не було, записати це явно: «виправлень не було, усі задачі пройшли з першої спроби» це теж факт для кейсу.
 

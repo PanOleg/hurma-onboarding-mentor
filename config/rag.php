@@ -1,0 +1,45 @@
+<?php
+
+return [
+    'top_k' => (int) env('RAG_TOP_K', 8),
+    'candidate_limit' => (int) env('RAG_CANDIDATE_LIMIT', 100),
+    'max_distance' => (float) env('RAG_MAX_DISTANCE', 0.35),
+    'embedding_dim' => 384,
+    'chunk' => [
+        'target_tokens' => 400,
+        'overlap_tokens' => 60,
+        'max_tokens' => 600,
+    ],
+    'embedder' => [
+        'url' => env('EMBEDDER_URL', 'http://127.0.0.1:8100'),
+        'timeout_embed' => 30,
+        'timeout_extract' => 120,
+        'batch_size' => 32,
+    ],
+    'models' => [
+        'answer' => env('RAG_MODEL_ANSWER', 'claude-sonnet-5-5'),
+        'helper' => env('RAG_MODEL_HELPER', 'claude-haiku-4-5'),
+    ],
+    'prompts' => [
+        'answer' => 'answer.v1',
+        'rewrite' => 'rewrite.v1',
+        'grounding' => 'grounding.v1',
+    ],
+    'llm' => ['driver' => env('RAG_LLM_DRIVER', 'anthropic')], // anthropic | openai_compatible
+    'openai_compatible' => [
+        'base_url' => env('OPENAI_COMPAT_BASE_URL', 'https://api.groq.com/openai/v1'),
+        'api_key' => env('OPENAI_COMPAT_API_KEY', env('GROQ_API_KEY')),
+        'model_answer' => env('OPENAI_COMPAT_MODEL_ANSWER', 'openai/gpt-oss-120b'),
+        'model_helper' => env('OPENAI_COMPAT_MODEL_HELPER', 'openai/gpt-oss-20b'),
+        'timeout' => 60,
+        'reasoning_effort' => env('OPENAI_COMPAT_REASONING_EFFORT', 'low'),
+        'helper_max_tokens' => (int) env('OPENAI_COMPAT_HELPER_MAX_TOKENS', 1024),
+    ],
+    'anthropic' => [
+        'api_key' => env('ANTHROPIC_API_KEY'),
+    ],
+    'upload' => [
+        'max_bytes' => 20 * 1024 * 1024,
+        'mimes' => ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'text/markdown', 'text/plain'],
+    ],
+];
