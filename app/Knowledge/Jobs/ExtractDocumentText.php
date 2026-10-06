@@ -6,6 +6,7 @@ use App\Knowledge\Contracts\TextExtractor;
 use App\Knowledge\Enums\DocumentStatus;
 use App\Knowledge\Enums\IngestionStep;
 use App\Knowledge\Extraction\ExtractedPage;
+use App\Knowledge\Extraction\ExtractionException;
 use App\Knowledge\Ingestion\IngestionArtifacts;
 use Illuminate\Support\Facades\Storage;
 
@@ -27,18 +28,27 @@ final class ExtractDocumentText extends IngestionJob
         if ($document === null) {
             return;
         }
-        $disk = Storage::disk('local');
-        $pages = $extractor->extract($disk->path($document->storage_path), $document->mime);
-        $nonEmpty = array_filter($pages, fn (ExtractedPage $p) => trim($p->text) !== '');
-        if ($nonEmpty === []) {
-            $e = new NoTextLayerException('document has no extractable text');
-            $this->fail($e);
-            throw $e;
-        }
-        $disk->put(IngestionArtifacts::pagesPath($document), json_encode(
-            array_map(fn (ExtractedPage $p) => ['page' => $p->page, 'text' => $p->text], $pages),
-            JSON_UNESCAPED_UNICODE
-        ));
-        $this->finish($document, DocumentStatus::Extracting);
+        $this->guarded(function () use ($document, $extractor) {
+            $disk = Storage::disk('local');
+            try {
+                $pages = $extractor->extract($disk->path($document->storage_path), $document->mime);
+            } catch (ExtractionException $e) {
+                if ($e->code_ === ExtractionException::UNSUPPORTED) {
+                    $this->fail($e); // not retryable
+                }
+                throw $e;
+            }
+            $nonEmpty = array_filter($pages, fn (ExtractedPage $p) => trim($p->text) !== '');
+            if ($nonEmpty === []) {
+                $e = new NoTextLayerException('document has no extractable text');
+                $this->fail($e);
+                throw $e;
+            }
+            $disk->put(IngestionArtifacts::pagesPath($document), json_encode(
+                array_map(fn (ExtractedPage $p) => ['page' => $p->page, 'text' => $p->text], $pages),
+                JSON_UNESCAPED_UNICODE
+            ));
+            $this->finish($document, DocumentStatus::Extracting);
+        });
     }
 }

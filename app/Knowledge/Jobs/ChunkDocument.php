@@ -28,15 +28,17 @@ final class ChunkDocument extends IngestionJob
         if ($document === null) {
             return;
         }
-        $disk = Storage::disk('local');
-        $pages = array_map(
-            fn (array $p) => new ExtractedPage((int) $p['page'], (string) $p['text']),
-            json_decode((string) $disk->get(IngestionArtifacts::pagesPath($document)), true, flags: JSON_THROW_ON_ERROR)
-        );
-        $chunks = $chunker->chunk($pages);
-        $disk->put(IngestionArtifacts::chunksPath($document), json_encode(array_map(fn (Chunk $c) => [
-            'position' => $c->position, 'page' => $c->page, 'heading' => $c->heading, 'content' => $c->content, 'tokenCount' => $c->tokenCount,
-        ], $chunks), JSON_UNESCAPED_UNICODE));
-        $this->finish($document, DocumentStatus::Chunking);
+        $this->guarded(function () use ($document, $chunker) {
+            $disk = Storage::disk('local');
+            $pages = array_map(
+                fn (array $p) => new ExtractedPage((int) $p['page'], (string) $p['text']),
+                json_decode((string) $disk->get(IngestionArtifacts::pagesPath($document)), true, flags: JSON_THROW_ON_ERROR)
+            );
+            $chunks = $chunker->chunk($pages);
+            $disk->put(IngestionArtifacts::chunksPath($document), json_encode(array_map(fn (Chunk $c) => [
+                'position' => $c->position, 'page' => $c->page, 'heading' => $c->heading, 'content' => $c->content, 'tokenCount' => $c->tokenCount,
+            ], $chunks), JSON_UNESCAPED_UNICODE));
+            $this->finish($document, DocumentStatus::Chunking);
+        });
     }
 }

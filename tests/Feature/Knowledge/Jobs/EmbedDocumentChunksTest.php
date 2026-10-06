@@ -2,6 +2,7 @@
 
 use App\Knowledge\Contracts\EmbeddingProvider;
 use App\Knowledge\Embedding\EmbeddingException;
+use App\Knowledge\Embedding\FakeEmbeddingProvider;
 use App\Knowledge\Enums\DocumentStatus;
 use App\Knowledge\Enums\FailureCode;
 use App\Knowledge\Ingestion\ChunkWriter;
@@ -26,10 +27,29 @@ it('embeds in batches of 32 and sets chunks_count', function () {
     config(['rag.embedder.batch_size' => 32]);
     $doc = Document::factory()->status(DocumentStatus::Chunking)->create();
     putChunks($doc, 70);
+    $spy = new class implements EmbeddingProvider
+    {
+        /** @var list<int> */
+        public array $sizes = [];
+
+        public function embedPassages(array $texts): array
+        {
+            $this->sizes[] = count($texts);
+
+            return (new FakeEmbeddingProvider)->embedPassages($texts);
+        }
+
+        public function embedQuery(string $text): array
+        {
+            return (new FakeEmbeddingProvider)->embedQuery($text);
+        }
+    };
+    app()->instance(EmbeddingProvider::class, $spy);
 
     (new EmbedDocumentChunks($doc->id))->handle(app(EmbeddingProvider::class), app(ChunkWriter::class));
 
-    expect($doc->refresh()->status)->toBe(DocumentStatus::Ready)
+    expect($spy->sizes)->toBe([32, 32, 6])
+        ->and($doc->refresh()->status)->toBe(DocumentStatus::Ready)
         ->and($doc->chunks_count)->toBe(70)
         ->and(DB::table('document_chunks')->where('document_id', $doc->id)->count())->toBe(70);
 });

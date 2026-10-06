@@ -29,16 +29,18 @@ final class EmbedDocumentChunks extends IngestionJob
         if ($document === null) {
             return;
         }
-        $raw = json_decode((string) Storage::disk('local')->get(IngestionArtifacts::chunksPath($document)), true, flags: JSON_THROW_ON_ERROR);
-        $chunks = array_map(fn (array $c) => new Chunk($c['position'], $c['page'], $c['heading'], $c['content'], $c['tokenCount']), $raw);
+        $this->guarded(function () use ($document, $embeddings, $writer) {
+            $raw = json_decode((string) Storage::disk('local')->get(IngestionArtifacts::chunksPath($document)), true, flags: JSON_THROW_ON_ERROR);
+            $chunks = array_map(fn (array $c) => new Chunk($c['position'], $c['page'], $c['heading'], $c['content'], $c['tokenCount']), $raw);
 
-        // idempotency for retries: drop partial rows from a previous attempt
-        DB::table('document_chunks')->where('document_id', $document->id)->delete();
+            // idempotency for retries: drop partial rows from a previous attempt
+            DB::table('document_chunks')->where('document_id', $document->id)->delete();
 
-        foreach (array_chunk($chunks, (int) config('rag.embedder.batch_size')) as $batch) {
-            $vectors = $embeddings->embedPassages(array_map(fn (Chunk $c) => $c->content, $batch));
-            $writer->insertBatch($document, $batch, $vectors);
-        }
-        $this->finish($document, DocumentStatus::Ready, ['chunks_count' => count($chunks)]);
+            foreach (array_chunk($chunks, (int) config('rag.embedder.batch_size')) as $batch) {
+                $vectors = $embeddings->embedPassages(array_map(fn (Chunk $c) => $c->content, $batch));
+                $writer->insertBatch($document, $batch, $vectors);
+            }
+            $this->finish($document, DocumentStatus::Ready, ['chunks_count' => count($chunks)]);
+        });
     }
 }

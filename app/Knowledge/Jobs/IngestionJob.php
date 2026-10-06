@@ -51,6 +51,17 @@ abstract class IngestionJob implements ShouldQueue
         return $document;
     }
 
+    /** Closes this attempt's run row as failed with its own error, then rethrows so the queue can retry. */
+    protected function guarded(callable $work): void
+    {
+        try {
+            $work();
+        } catch (Throwable $e) {
+            $this->run?->forceFill(['status' => 'failed', 'finished_at' => now(), 'error' => mb_substr($e->getMessage(), 0, 2000)])->save();
+            throw $e;
+        }
+    }
+
     /** @param  array<string, mixed>  $extra */
     protected function finish(Document $document, DocumentStatus $next, array $extra = []): void
     {
@@ -64,6 +75,7 @@ abstract class IngestionJob implements ShouldQueue
         if ($document === null) {
             return;
         }
+        // defensive: attempts normally close their own row in guarded()
         $document->ingestionRuns()->where('status', 'running')->update([
             'status' => 'failed', 'finished_at' => now(), 'error' => mb_substr($e->getMessage(), 0, 2000),
         ]);
