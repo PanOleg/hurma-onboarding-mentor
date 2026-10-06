@@ -2535,7 +2535,7 @@ git commit -m "feat(knowledge): document upload/list/show api with policy and sh
 
 ---
 
-### Task 10: ChunkSearchRepository і кеш ембедингу запиту
+### Task 10: ChunkSearchRepository і кеш ембедингу запиту ✅ (ec2499c, рев'ю прийнято)
 
 **Files:**
 - Create: `app/Retrieval/SearchHit.php`, `app/Retrieval/ChunkSearchRepository.php`, `app/Retrieval/QueryEmbeddingCache.php`
@@ -2559,7 +2559,7 @@ final class QueryEmbeddingCache {
 }
 ```
 
-- [ ] **Step 1: Тести репозиторію (негативний тест аудиторії, AC-5 на рівні SQL)**
+- [x] **Step 1: Тести репозиторію (негативний тест аудиторії, AC-5 на рівні SQL)**
 
 ```php
 <?php
@@ -2636,7 +2636,7 @@ it('returns an empty list when there are no chunks', function () {
 });
 ```
 
-- [ ] **Step 2: Реалізація репозиторію**
+- [x] **Step 2: Реалізація репозиторію**
 
 ```php
 <?php
@@ -2683,7 +2683,7 @@ final class ChunkSearchRepository
 
 Run: `php artisan test --filter=ChunkSearchRepositoryTest`. Expected: 4 passed.
 
-- [ ] **Step 3: Кеш ембедингу запиту**
+- [x] **Step 3: Кеш ембедингу запиту**
 
 Тест `tests/Feature/Retrieval/QueryEmbeddingCacheTest.php`:
 ```php
@@ -2735,7 +2735,7 @@ final class QueryEmbeddingCache
 
 Run: `php artisan test --filter=QueryEmbeddingCacheTest`. Expected: 1 passed.
 
-- [ ] **Step 4: Коміт**
+- [x] **Step 4: Коміт**
 
 ```bash
 git add -A
