@@ -1,0 +1,5 @@
+.idea/
+.env
+/vendor/
+/node_modules/
+/storage/app/knowledge/
