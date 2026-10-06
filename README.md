@@ -12,10 +12,14 @@ cp .env.example .env         # потім заповніть ANTHROPIC_API_KEY
 composer install
 php artisan key:generate
 php artisan migrate --seed   # демо-користувачі та п'ять документів Vesna Tech
-php artisan serve
-php artisan queue:work --queue=ingestion   # окремий термінал: обробка завантажених документів
+make serve                   # php artisan serve з лімітом завантаження 20 МБ
+php artisan queue:work --queue=ingestion   # окремий термінал: обробка завантажених документів (воркер із типовим timeout або більшим)
 npm install && npm run dev                 # ще один термінал: фронтенд
 ```
+
+Застосунок відкривається на `http://localhost:8000`.
+
+Ліміт завантаження 20 МБ (AC-1) потребує значень `upload_max_filesize=20M` і `post_max_size=21M` у php.ini; `make serve` передає їх сам, а Docker-образ у плані 3 пропише їх у конфігурації. Воркер черги має працювати з типовим timeout або вищим (job інжесту має `timeout` 150 с, `retry_after` 180 с).
 
 Після `migrate --seed` документи ставляться в чергу інжесту. Доки `queue:work` не обробить їх, вони матимуть статус, відмінний від `ready`, а відповіді на питання з'являться лише після цього. Демо-дані можна дозавантажити окремо командою `make demo`.
 
@@ -32,12 +36,15 @@ npm install && npm run dev                 # ще один термінал: ф�
 ## Тести
 
 ```bash
-php artisan test                  # потрібні mariadb і redis: docker compose up -d mariadb redis
-(cd services/embedder && pytest)  # сайдкар ембедингів
+php artisan test                  # потрібна лише MariaDB на порту 3307 (docker compose up -d mariadb)
 npm run test                      # фронтенд (Vitest)
+(cd services/embedder && python3 -m venv .venv && .venv/bin/pip install -r requirements.txt)  # один раз
+(cd services/embedder && .venv/bin/python -m pytest -q)  # сайдкар ембедингів
 ```
 
-Тести не ходять у мережу: зовнішні сервіси підміняються Fake-реалізаціями.
+Тести використовують array-кеш і sync-чергу, тому Redis їм не потрібен. Тести не ходять у мережу: зовнішні сервіси підміняються Fake-реалізаціями. Перший запуск pytest завантажує модель ембедингів, тож потрібна мережа.
+
+Команда `make eval` (оцінка якості відповідей) з'явиться в плані 3.
 
 ## Структура репозиторію
 

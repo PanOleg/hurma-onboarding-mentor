@@ -14,7 +14,7 @@ PHP 8.4, Laravel 13, Pest 5, MariaDB 11.8 (Docker, port 3307 for tests), Redis, 
 
 ## Hard rules
 - No secrets, no real personal data anywhere (code, fixtures, prompts, docs/process/sessions). Use the fictional company "Vesna Tech".
-- Raw SQL only in the document_chunks migration and app/Retrieval/ChunkSearchRepository.php.
+- Raw SQL only in three places: the document_chunks migration, `app/Knowledge/Ingestion/ChunkWriter.php` (INSERT) and `app/Retrieval/ChunkSearchRepository.php` (SELECT). Known exception, to fix in plan 2: `MessageResource` loads history citations via Eloquent relations without `visibilityWhere`; no new content is disclosed because title/page/quote were already sent at answer time.
 - Any read of document_chunks goes through Document::visibilityWhere(). Never bypass.
 - External services only via contracts (EmbeddingProvider, TextExtractor, LlmClient). Tests bind the Fake implementations. No network in tests.
 - Prompts live in resources/prompts/<name>.vN.md. Changing a prompt = new version file + snapshot test update + `php artisan rag:eval` + note in docs/04-evals.md. Use skill prompt-change.

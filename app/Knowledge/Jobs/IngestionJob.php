@@ -22,6 +22,8 @@ abstract class IngestionJob implements ShouldQueue
 
     public int $tries = 3;
 
+    public int $timeout = 150;
+
     /** @var list<int> */
     public array $backoff = [10, 30, 90];
 
