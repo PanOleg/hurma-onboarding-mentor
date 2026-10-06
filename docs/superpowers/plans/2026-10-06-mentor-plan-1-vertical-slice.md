@@ -2744,7 +2744,7 @@ git commit -m "feat(retrieval): indexed candidate search with audience filter an
 
 ---
 
-### Task 11: LlmClient: контракт, промпти v1, Anthropic-реалізація, фейк, snapshot-тест
+### Task 11: LlmClient: контракт, промпти v1, Anthropic-реалізація, фейк, snapshot-тест ✅ (7b09985, рев'ю прийнято)
 
 **Files:**
 - Create: `app/Chat/Contracts/LlmClient.php`, `app/Chat/Llm/AnswerResult.php`, `app/Chat/Llm/GroundingResult.php`, `app/Chat/Llm/LlmException.php`, `app/Chat/Llm/PromptLoader.php`, `app/Chat/Llm/PromptBuilder.php`, `app/Chat/Llm/AnthropicLlmClient.php`, `app/Chat/Llm/FakeLlmClient.php`, `resources/prompts/answer.v1.md`, `resources/prompts/rewrite.v1.md`, `resources/prompts/grounding.v1.md`
@@ -2779,7 +2779,7 @@ final class FakeLlmClient implements LlmClient {
 }
 ```
 
-- [ ] **Step 1: Промпти v1**
+- [x] **Step 1: Промпти v1**
 
 `resources/prompts/answer.v1.md`:
 ```markdown
@@ -2803,7 +2803,7 @@ final class FakeLlmClient implements LlmClient {
 Перевір, чи кожне твердження у відповіді підтверджується наданими фрагментами. Відповідь вважається grounded, якщо вона не містить фактів, яких немає у фрагментах, або якщо вона чесно каже, що інформації немає. Поверни grounded true/false і коротку причину одним реченням.
 ```
 
-- [ ] **Step 2: Snapshot-тест збірки промпту і тест фейка**
+- [x] **Step 2: Snapshot-тест збірки промпту і тест фейка**
 
 `tests/Unit/Chat/PromptSnapshotTest.php`:
 ```php
@@ -2865,7 +2865,7 @@ it('throws the configured exception', function () {
 
 Run: `php artisan test --filter='PromptSnapshotTest|FakeLlmClientTest'`. Expected: FAIL.
 
-- [ ] **Step 3: PromptLoader, PromptBuilder**
+- [x] **Step 3: PromptLoader, PromptBuilder**
 
 ```php
 final class PromptLoader
@@ -2922,7 +2922,7 @@ final class PromptBuilder
 }
 ```
 
-- [ ] **Step 4: AnswerResult, GroundingResult, LlmException, FakeLlmClient**
+- [x] **Step 4: AnswerResult, GroundingResult, LlmException, FakeLlmClient**
 
 `GroundingResult`:
 ```php
@@ -3004,7 +3004,7 @@ final class FakeLlmClient implements LlmClient
 }
 ```
 
-- [ ] **Step 5: AnthropicLlmClient**
+- [x] **Step 5: AnthropicLlmClient**
 
 ```php
 <?php
@@ -3110,7 +3110,7 @@ final class AnthropicLlmClient implements LlmClient
 ```
 Якщо `RawMessageDeltaEvent::$delta->stopReason` або `Anthropic\Core\Exceptions\APIConnectionException` не існують під такими іменами у встановленій версії SDK, подивитися `vendor/anthropic-ai/sdk/src/Messages/RawMessageDeltaEvent/Delta.php` і `vendor/anthropic-ai/sdk/src/Core/Exceptions/` і виправити імпорти, не вигадуючи назв.
 
-- [ ] **Step 6: Прив'язки**
+- [x] **Step 6: Прив'язки**
 
 `RagServiceProvider::register`:
 ```php
@@ -3126,11 +3126,11 @@ $this->app->singleton(FakeLlmClient::class);
 $this->app->bind(LlmClient::class, FakeLlmClient::class);
 ```
 
-- [ ] **Step 7: Запустити тести, зафіксувати snapshots**
+- [x] **Step 7: Запустити тести, зафіксувати snapshots**
 
 Run: `php artisan test --filter='PromptSnapshotTest|FakeLlmClientTest'`. Expected: перший запуск створює snapshots у `tests/.pest/snapshots/`, далі PASS. Відкрити snapshot-файли й прочитати, що промпт зібрався як очікувалось. Закомітити snapshots.
 
-- [ ] **Step 8: Коміт**
+- [x] **Step 8: Коміт**
 
 ```bash
 git add -A
