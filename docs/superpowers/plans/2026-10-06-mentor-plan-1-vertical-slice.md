@@ -717,7 +717,7 @@ git commit -m "feat(embedder): fastapi sidecar with /embed and /extract-text, co
 
 ---
 
-### Task 4: Міграції, enums, моделі, фабрики
+### Task 4: Міграції, enums, моделі, фабрики ✅ (b47f7d0, рев'ю прийнято)
 
 **Files:**
 - Create: 9 міграцій у `database/migrations/`, `app/Knowledge/Enums/{DocumentStatus,AudienceType,IngestionStep,FailureCode}.php`, `app/Chat/Enums/MessageStatus.php`, `app/Knowledge/Models/{Department,Document,DocumentChunk,IngestionRun}.php`, `app/Chat/Models/{Conversation,Message,MessageCitation}.php`, `app/Insights/Models/KnowledgeGap.php`, фабрики `database/factories/{DepartmentFactory,DocumentFactory,ConversationFactory}.php`
@@ -727,7 +727,7 @@ git commit -m "feat(embedder): fastapi sidecar with /embed and /extract-text, co
 **Interfaces:**
 - Produces: моделі з розділу 6 спеки. Ключові сигнатури: `Document::visibilityWhere(Builder|QueryBuilder $q, User $user, string $table = 'documents'): void`, `Document::scopeVisibleTo(Builder $q, User $user)`, `Document::scopeReady(Builder $q)`, `User::isHrAdmin(): bool`. Enum `DocumentStatus` зі значеннями `uploaded, extracting, chunking, embedding, ready, failed`. Enum `FailureCode`: `no_text_layer, extractor_unavailable, embedder_unavailable, unsupported_format, unknown`.
 
-- [ ] **Step 1: Enums**
+- [x] **Step 1: Enums**
 
 `app/Knowledge/Enums/DocumentStatus.php`:
 ```php
@@ -757,7 +757,7 @@ enum DocumentStatus: string
 
 `AudienceType`: cases `All = 'all'`, `Department = 'department'`, `Role = 'role'`. `IngestionStep`: `Extract = 'extract'`, `Chunk = 'chunk'`, `Embed = 'embed'`. `FailureCode`: `NoTextLayer = 'no_text_layer'`, `ExtractorUnavailable = 'extractor_unavailable'`, `EmbedderUnavailable = 'embedder_unavailable'`, `UnsupportedFormat = 'unsupported_format'`, `Unknown = 'unknown'`. `App\Chat\Enums\MessageStatus`: `Streaming = 'streaming'`, `Completed = 'completed'`, `Failed = 'failed'`, `NoAnswer = 'no_answer'`.
 
-- [ ] **Step 2: Міграції**
+- [x] **Step 2: Міграції**
 
 Доповнити міграцію users (`0001_01_01_000000_create_users_table.php`) полями після `password`:
 ```php
@@ -830,7 +830,7 @@ public function down(): void
 
 `2026_10_06_000070_create_knowledge_gaps_table.php`: `id, question_normalized string unique, question_example text, occurrences unsignedInteger default 1, status string(15) default 'open', resolved_document_id FK nullable nullOnDelete, last_asked_at timestamp, timestamps`.
 
-- [ ] **Step 3: Моделі**
+- [x] **Step 3: Моделі**
 
 `app/Knowledge/Models/Document.php`:
 ```php
@@ -955,7 +955,7 @@ public function department(): BelongsTo
 ```
 Прибрати `HasApiTokens`, якщо `install:api` додав, не потрібен для cookie-автентифікації (залишити не шкодить, але тоді не забути про міграцію personal_access_tokens, її лишаємо як є).
 
-- [ ] **Step 4: Фабрики**
+- [x] **Step 4: Фабрики**
 
 `DepartmentFactory`: `name => fake()->unique()->randomElement(['Engineering', 'Marketing', 'Sales', 'Support', 'HR'])`.
 
@@ -1009,7 +1009,7 @@ public function status(DocumentStatus $status): static
 
 `ConversationFactory`: `user_id => User::factory()`, `last_message_at => now()`.
 
-- [ ] **Step 5: Тест схеми й видимості (падає до реалізації)**
+- [x] **Step 5: Тест схеми й видимості (падає до реалізації)**
 
 `tests/Feature/Knowledge/SchemaTest.php`:
 ```php
@@ -1062,14 +1062,14 @@ it('does not match department rule for a user without department', function () {
 });
 ```
 
-- [ ] **Step 6: Запустити міграції й тести**
+- [x] **Step 6: Запустити міграції й тести**
 
 ```bash
 docker compose up -d mariadb && php artisan migrate --env=testing && php artisan test --filter=SchemaTest
 ```
 Expected: 3 passed. Якщо `VECTOR` дає синтаксичну помилку, перевірити версію: `docker compose exec mariadb mariadb -V` має показати 11.8.
 
-- [ ] **Step 7: Коміт**
+- [x] **Step 7: Коміт**
 
 ```bash
 git add -A
