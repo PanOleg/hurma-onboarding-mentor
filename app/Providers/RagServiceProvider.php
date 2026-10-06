@@ -46,6 +46,8 @@ class RagServiceProvider extends ServiceProvider
             (string) config('rag.openai_compatible.model_answer'),
             (string) config('rag.openai_compatible.model_helper'),
             (int) config('rag.openai_compatible.timeout'),
+            (string) config('rag.openai_compatible.reasoning_effort'),
+            (int) config('rag.openai_compatible.helper_max_tokens'),
         ));
         $this->app->bind(LlmClient::class, fn ($app) => match (config('rag.llm.driver')) {
             'anthropic' => $app->make(AnthropicLlmClient::class),

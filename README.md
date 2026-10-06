@@ -53,11 +53,11 @@ npm run test                      # фронтенд (Vitest)
 ```bash
 RAG_LLM_DRIVER=openai_compatible
 OPENAI_COMPAT_API_KEY=<ключ Groq>
-OPENAI_COMPAT_MODEL_ANSWER=llama-3.3-70b-versatile
-OPENAI_COMPAT_MODEL_HELPER=llama-3.1-8b-instant
+OPENAI_COMPAT_MODEL_ANSWER=openai/gpt-oss-120b
+OPENAI_COMPAT_MODEL_HELPER=openai/gpt-oss-20b
 ```
 
-Повернення до Claude: `RAG_LLM_DRIVER=anthropic`.
+Перелік доступних моделей залежить від провайдера й акаунта (`GET /models`), тож за потреби змініть назви моделей. Повернення до Claude: `RAG_LLM_DRIVER=anthropic`.
 
 ## Структура репозиторію
 

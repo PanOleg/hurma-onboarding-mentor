@@ -179,3 +179,22 @@ it('keeps the streamed answer completed when the grounding check fails', functio
         ->and($assistant->grounded)->toBeFalse()
         ->and(KnowledgeGap::first()->status)->toBe('needs_review');
 });
+
+it('continues with the raw question when the rewrite step fails', function () {
+    seedKnowledge(['Скільки днів відпустки має працівник: 24 дні.']);
+    $this->conversation->messages()->create(['role' => 'user', 'content' => 'Привіт', 'status' => 'completed']);
+    $this->conversation->messages()->create(['role' => 'assistant', 'content' => 'Вітаю', 'status' => 'completed']);
+    $llm = app(FakeLlmClient::class);
+    $llm->throwsOn = 'rewriteQuestion';
+    $llm->throws = new LlmException(LlmException::UNAVAILABLE, 'down');
+    $llm->nextAnswer = 'Працівник має 24 дні відпустки [1].';
+
+    $response = $this->actingAs($this->user)->post("/api/v1/conversations/{$this->conversation->id}/messages", ['content' => 'Скільки днів відпустки?']);
+
+    $names = array_map(fn ($e) => $e['event'], sseEvents($response->streamedContent()));
+    $last = Message::where('role', 'assistant')->latest('id')->first();
+    expect($names)->toContain('token')->and(end($names))->toBe('done')
+        ->and($last->status)->toBe(MessageStatus::Completed)
+        ->and($last->rewritten_question)->toBeNull()
+        ->and($llm->calls['streamAnswer'][0]['user'])->toContain('Скільки днів відпустки?');
+});

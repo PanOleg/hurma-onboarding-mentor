@@ -43,8 +43,13 @@ final class AnswerService
             $question = $content;
             if ($history !== []) {
                 $rewrite = $this->prompts->rewrite($content, $history);
-                $question = $this->llm->rewriteQuestion($rewrite['system'], $rewrite['user']);
-                $assistant->rewritten_question = $question;
+                try {
+                    $question = $this->llm->rewriteQuestion($rewrite['system'], $rewrite['user']);
+                    $assistant->rewritten_question = $question;
+                } catch (Throwable $e) {
+                    Log::warning('rag.rewrite_failed', ['message_id' => $assistant->id, 'exception' => $e]);
+                    $question = $content;
+                }
             }
 
             $vector = $this->embeddings->embedQuery($question);

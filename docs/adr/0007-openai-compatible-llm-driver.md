@@ -8,7 +8,7 @@
 
 ## Рішення
 
-Додати драйвер `OpenAiCompatibleLlmClient`, який працює з будь-яким OpenAI-сумісним API через HTTP-клієнт Laravel, і перемикати його змінною `RAG_LLM_DRIVER` (`anthropic` або `openai_compatible`). Першим провайдером обрано Groq: `llama-3.3-70b-versatile` для відповідей і `llama-3.1-8b-instant` для допоміжних викликів. Grounding-перевірка просить JSON через `response_format: json_object` і парсить результат, а не використовує сувору схему. Повернення до Claude це один рядок: `RAG_LLM_DRIVER=anthropic`.
+Додати драйвер `OpenAiCompatibleLlmClient`, який працює з будь-яким OpenAI-сумісним API через HTTP-клієнт Laravel, і перемикати його змінною `RAG_LLM_DRIVER` (`anthropic` або `openai_compatible`). Першим провайдером обрано Groq: `openai/gpt-oss-120b` для відповідей і `openai/gpt-oss-20b` для допоміжних викликів. Grounding-перевірка просить JSON через `response_format: json_object` і парсить результат, а не використовує сувору схему. Повернення до Claude це один рядок: `RAG_LLM_DRIVER=anthropic`.
 
 ## Альтернативи
 
