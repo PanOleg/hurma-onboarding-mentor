@@ -4039,7 +4039,7 @@ git commit -m "feat(web): vue spa with login, streaming chat and citation panel 
 
 ---
 
-### Task 15: Демо-дані Vesna Tech, журнал сесії, тег віхи
+### Task 15: Демо-дані Vesna Tech, журнал сесії, тег віхи ✅ (5b8fd75, тег v0.1-vertical-slice, рев'ю прийнято)
 
 **Files:**
 - Create: `database/seeders/DemoSeeder.php`, `database/seeders/demo/01-vacation-policy.md`, `database/seeders/demo/02-onboarding-guide.md`, `database/seeders/demo/03-security-policy.md`, `database/seeders/demo/04-code-review.md`, `database/seeders/demo/05-benefits.md`, `README.md`
@@ -4049,7 +4049,7 @@ git commit -m "feat(web): vue spa with login, streaming chat and citation panel 
 **Interfaces:**
 - Produces: користувачі демо `hr@vesna.test / password` (hr_admin), `dev@vesna.test / password` (Engineering, developer), `pm@vesna.test / password` (Marketing, manager). П'ять Markdown-документів вигаданої компанії, аудиторії: 01, 02, 05 для всіх; 03 для всіх; 04 для відділу Engineering.
 
-- [ ] **Step 1: Тест сідера**
+- [x] **Step 1: Тест сідера**
 
 ```php
 <?php
@@ -4071,7 +4071,7 @@ it('seeds users and ingests five demo documents to ready', function () {
 });
 ```
 
-- [ ] **Step 2: Документи демо**
+- [x] **Step 2: Документи демо**
 
 Кожен файл 600–1200 слів українською про вигадану компанію Vesna Tech, з заголовками `#`/`##`, без реальних імен і контактів. Теми й ключові факти (вони ж підуть в eval у плані 3):
 - `01-vacation-policy.md`: 24 календарні дні, заявка за 14 днів, перенесення до 10 днів, перші 6 місяців пропорційно.
@@ -4080,7 +4080,7 @@ it('seeds users and ingests five demo documents to ready', function () {
 - `04-code-review.md`: PR до 400 рядків, два апрува, CI зелений, рев'ю протягом 24 годин, аудиторія Engineering.
 - `05-benefits.md`: медстрахування після 3 місяців, бюджет на навчання 500 на рік, спортивна компенсація.
 
-- [ ] **Step 3: DemoSeeder**
+- [x] **Step 3: DemoSeeder**
 
 ```php
 final class DemoSeeder extends Seeder
@@ -4111,11 +4111,11 @@ final class DemoSeeder extends Seeder
 ```
 У тесті черга `sync`, тому документи стають `ready` одразу. У dev з Redis-чергою запустити `php artisan queue:work --queue=ingestion`.
 
-- [ ] **Step 4: README.md**
+- [x] **Step 4: README.md**
 
 Розділи: що це і для кого (3 речення, лінк на спеку і кейс), швидкий старт (`make up`, `cp .env.example .env`, заповнити `ANTHROPIC_API_KEY`, `php artisan migrate --seed`, `make demo`, `php artisan serve`, `php artisan queue:work --queue=ingestion`, `npm run dev`), демо-логіни, як запускати тести, структура репо, посилання на `docs/`.
 
-- [ ] **Step 5: Журнал сесії та тег**
+- [x] **Step 5: Журнал сесії та тег**
 
 Доповнити `docs/process/sessions/2026-10-06-plan-1.md` рядками для кожного виправлення, яке відбулось під час виконання задач 2–14 (що агент зробив не так, яке правило додано). Якщо виправлень не було, записати це явно: «виправлень не було, усі задачі пройшли з першої спроби» це теж факт для кейсу.
 
