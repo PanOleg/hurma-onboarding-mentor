@@ -4,7 +4,7 @@
 
 ## 1. Мета і контекст
 
-Hurma System це HRM + ATS + OKR для 1 000+ команд, single-tenant SaaS на PHP (Laravel) + Vue, частково Python, MariaDB, Redis, Kubernetes. Команда переходить на AI-first розробку (Claude Code, Spec-Driven Development).
+Hurma System це HRM + ATS + OKR для 1 000+ команд, single-tenant SaaS на PHP (Laravel) + Vue. Кейс будується на Laravel 13 (актуальна версія на жовтень 2026, PHP 8.3+), частково Python, MariaDB, Redis, Kubernetes. Команда переходить на AI-first розробку (Claude Code, Spec-Driven Development).
 
 Цей проєкт це публічний кейс: одна продуктова фіча для модуля онбордингу Hurma, зроблена з нуля за процесом Spec-Driven Development, з повним слідом артефактів від brief до рев'ю. Фіча має бути реальною, запускатися однією командою і проходити тести. Кейс адресований тех ліду Hurma, але має бути зрозумілий будь-якому технічному рев'юеру.
 
@@ -65,7 +65,7 @@ flowchart LR
     SPA[Vue 3 SPA<br/>Vuetify, Pinia]
   end
   subgraph compose[Docker Compose]
-    APP[app: Laravel 12 API<br/>PHP 8.4, nginx + php-fpm]
+    APP[app: Laravel 13 API<br/>PHP 8.4, nginx + php-fpm]
     WORKER[worker: Horizon<br/>той самий образ]
     EMB[embedder: FastAPI<br/>fastembed multilingual-e5-small]
     DB[(MariaDB 11.8<br/>VECTOR + VECTOR INDEX)]
@@ -115,6 +115,8 @@ Single-tenant, тому без `company_id`. Усі id `bigint unsigned`, час
 | `knowledge_gaps` | question_normalized string unique, question_example text, occurrences int default 1, status enum(open, needs_review, resolved), resolved_document_id FK nullable, last_asked_at | |
 
 Міграція чанків пише DDL сирим SQL, бо Schema Builder не знає тип VECTOR. Це єдине місце з raw DDL. Пошук виконує один клас `ChunkSearchRepository`, єдине місце з raw SELECT.
+
+Обмеження MariaDB: векторний індекс застосовується лише до `ORDER BY VEC_DISTANCE_COSINE(...) LIMIT N` без інших умов. Тому пошук іде у два кроки в одному SQL: внутрішній підзапит бере top-K кандидатів за індексом (K = `config('rag.candidate_limit')`, стартове значення 100), зовнішній запит приєднує документи, застосовує фільтр аудиторії, статус ready і soft delete, і повертає top-k. Фільтр аудиторії все одно виконується в SQL до генерації, безпека не залежить від K.
 
 Фільтр аудиторії це Eloquent-scope `Document::visibleTo(User $user)`:
 
@@ -267,7 +269,7 @@ Nginx для цього маршруту: `proxy_buffering off`, `X-Accel-Buffer
 
 ## 9. Контракт сайдкара `embedder` (архітектор)
 
-FastAPI, Python 3.12, `fastembed` з моделлю `intfloat/multilingual-e5-small` (ONNX, 384 виміри, нормалізовані вектори). Доступний лише у внутрішній мережі Compose, без автентифікації. Модель завантажується при старті образу (вшита в образ на етапі build), не під час запиту.
+FastAPI, Python 3.12, `fastembed` з моделлю `intfloat/multilingual-e5-small`, підключеною через `TextEmbedding.add_custom_model` (ONNX, mean pooling, нормалізація, 384 виміри). Доступний лише у внутрішній мережі Compose, без автентифікації. Модель завантажується при старті образу (вшита в образ на етапі build), не під час запиту.
 
 | Метод | Шлях | Запит | Відповідь |
 |---|---|---|---|
@@ -275,7 +277,7 @@ FastAPI, Python 3.12, `fastembed` з моделлю `intfloat/multilingual-e5-sm
 | POST | `/extract-text` | multipart `file`, PDF або DOCX, до 20 МБ | `{"pages": [{"page": 1, "text": "..."}], "meta": {"pages_count": 12, "title": null}}`. DOCX повертає одну «сторінку» з абзацами через `\n\n` |
 | GET | `/health` | | `{"status": "ok", "model": "...", "dim": 384}` |
 
-Правило моделі e5: сервіс сам додає префікс `query: ` або `passage: ` залежно від `kind`. Laravel передає чисті тексти. Помилки: 422 на порожній масив або невідомий формат файлу, 413 на перевищення розміру, 500 з `{"error": "..."}`.
+Правило моделі e5: fastembed для custom-моделі префіксів не додає, тому сервіс сам додає префікс `query: ` або `passage: ` залежно від `kind`. Laravel передає чисті тексти. Помилки: 422 на порожній масив або невідомий формат файлу, 413 на перевищення розміру, 500 з `{"error": "..."}`.
 
 Laravel-клієнт: таймаут 30 с на `/embed`, 120 с на `/extract-text`, без ретраїв на рівні HTTP (ретраї робить job).
 
