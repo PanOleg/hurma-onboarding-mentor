@@ -1857,7 +1857,7 @@ git commit -m "feat(knowledge): deterministic chunker with headings, overlap and
 
 ---
 
-### Task 8: Ланцюжок інжесту: ChunkWriter, три job-и, DocumentIngestionService
+### Task 8: Ланцюжок інжесту: ChunkWriter, три job-и, DocumentIngestionService ✅ (5cb8318 + 34e44ca, рев'ю прийнято після 1 раунду)
 
 **Files:**
 - Create: `app/Knowledge/Ingestion/ChunkWriter.php`, `app/Knowledge/Ingestion/DocumentIngestionService.php`, `app/Knowledge/Ingestion/IngestionArtifacts.php`, `app/Knowledge/Jobs/ExtractDocumentText.php`, `app/Knowledge/Jobs/ChunkDocument.php`, `app/Knowledge/Jobs/EmbedDocumentChunks.php`
@@ -1881,7 +1881,7 @@ final class ChunkWriter {
 ```
 Кожен job: `public int $tries = 3; public array $backoff = [10, 30, 90]; public function __construct(public int $documentId) { $this->onQueue('ingestion'); }`.
 
-- [ ] **Step 1: Тест усього ланцюжка (sync queue у .env.testing)**
+- [x] **Step 1: Тест усього ланцюжка (sync queue у .env.testing)**
 
 `tests/Feature/Knowledge/IngestionChainTest.php`:
 ```php
@@ -1934,7 +1934,7 @@ it('uses the extractor for pdf pages and keeps page numbers on chunks', function
 });
 ```
 
-- [ ] **Step 2: Тести job-ів окремо (failed-гілки, AC-3, Review Focus 1)**
+- [x] **Step 2: Тести job-ів окремо (failed-гілки, AC-3, Review Focus 1)**
 
 `tests/Feature/Knowledge/Jobs/ExtractDocumentTextTest.php`:
 ```php
@@ -2048,7 +2048,7 @@ it('marks embedder_unavailable on provider failure', function () {
 
 Run: `php artisan test --filter='IngestionChainTest|ExtractDocumentTextTest|EmbedDocumentChunksTest'`. Expected: FAIL (класи відсутні).
 
-- [ ] **Step 3: IngestionArtifacts, ChunkWriter, DocumentIngestionService**
+- [x] **Step 3: IngestionArtifacts, ChunkWriter, DocumentIngestionService**
 
 ```php
 <?php
@@ -2127,7 +2127,7 @@ final class DocumentIngestionService
 }
 ```
 
-- [ ] **Step 4: Спільна база job-ів і три job-и**
+- [x] **Step 4: Спільна база job-ів і три job-и**
 
 Щоб не дублювати, абстрактний `app/Knowledge/Jobs/IngestionJob.php`:
 ```php
@@ -2313,11 +2313,11 @@ final class EmbedDocumentChunks extends IngestionJob
 }
 ```
 
-- [ ] **Step 5: Запустити тести**
+- [x] **Step 5: Запустити тести**
 
 Run: `php artisan test --filter='IngestionChainTest|ExtractDocumentTextTest|EmbedDocumentChunksTest'`. Expected: 7 passed. Якщо `Bus::chain` у sync-черзі не виконує наступні job-и, перевірити, що `QUEUE_CONNECTION=sync` у `.env.testing`.
 
-- [ ] **Step 6: Коміт**
+- [x] **Step 6: Коміт**
 
 ```bash
 git add -A
